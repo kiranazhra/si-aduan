@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+@import 'tailwindcss';
+
+@theme {
+    --color-navy: #0f2e5a;
+}
+
+.grad-btn {
+    background: linear-gradient(135deg, #1565C0 0%, #16a34a 100%);
+}
+
+.grad-btn:hover {
+    background: linear-gradient(135deg, #1d7ae0 0%, #1abc5a 100%);
+}
+
+/* Tombol putih yang berubah jadi gradasi biru-hijau saat hover/klik,
+   tombol lain yang tidak disentuh tetap putih seperti semula. */
+.btn-grad-hover {
+    background: #ffffff;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+}
+
+.btn-grad-hover:hover,
+.btn-grad-hover:focus-visible,
+.btn-grad-hover:active {
+    background: linear-gradient(135deg, #1565C0 0%, #16a34a 100%);
+}
+
+/* Nav underline: slide masuk dari kiri saat hover/active */
+.nav-link {
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #1565C0, #16a34a);
+    border-radius: 2px;
+    transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* Overlay gambar RSHD sebagai latar belakang tampilan publik/pelapor.
+   Ikut discroll bersama konten (bukan fixed) sampai batas sebelum footer. */
+.site-bg {
+    position: relative;
+}
+
+.site-bg-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: opacity 1.8s ease-in-out;
+    z-index: 0;
+}
+
+.site-bg-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(241,245,249,0.04) 0%, rgba(241,245,249,0.14) 45%, rgba(248,250,252,0.50) 78%, rgba(248,250,252,0.72) 100%);
+}
