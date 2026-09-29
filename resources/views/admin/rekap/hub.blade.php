@@ -7,7 +7,7 @@
     $bagian = [
         ['ikon' => 'bar_chart', 'label' => 'Data Aduan',       'ket' => 'Statistik dan tren keseluruhan pengaduan',  'rute' => 'admin.recap.data'],
         ['ikon' => 'category',  'label' => 'Kategori',         'ket' => 'Distribusi pengaduan per kategori layanan', 'rute' => 'admin.recap.category'],
-        ['ikon' => 'grade',     'label' => 'Grading Unit',     'ket' => 'Penilaian kinerja setiap unit pelayanan',   'rute' => 'admin.recap.grading'],
+        ['ikon' => 'grade',     'label' => 'Grading Unit',     'ket' => 'Jumlah aduan per grading Merah/Kuning/Hijau di tiap unit',   'rute' => 'admin.recap.grading'],
         ['ikon' => 'star',      'label' => 'Rating Pelayanan', 'ket' => 'Penilaian bintang dari pelapor, per unit',  'rute' => 'admin.recap.rating'],
         ['ikon' => 'place',     'label' => 'Lokasi / Ruangan', 'ket' => 'Distribusi pengaduan per area rumah sakit', 'rute' => 'admin.recap.room'],
         ['ikon' => 'insights',  'label' => 'Kesimpulan',       'ket' => 'Analisis dan rekomendasi tindak lanjut',    'rute' => 'admin.recap.conclusion'],

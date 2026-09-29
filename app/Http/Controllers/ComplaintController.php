@@ -96,7 +96,7 @@ class ComplaintController extends Controller
                     'uraian'           => $validated['uraian'],
                     'rating'           => (int) $validated['rating'],
                     'media'            => 'portal',
-                    'prioritas'        => 'sedang',
+                    // Grading (prioritas) sengaja tidak diisi: Admin yang menentukannya saat meneruskan tiket.
                     'status'           => 'diproses',
                 ]);
 

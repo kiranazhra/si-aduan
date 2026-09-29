@@ -38,7 +38,7 @@ class EksporTiketUnit
                 $t->nomor_tiket,
                 $t->judul,
                 $t->kategori->nama ?? '-',
-                ucfirst(self::nilai($t->prioritas)),
+                ($t->prioritas instanceof \App\Enums\PrioritasAduan ? $t->prioritas->label() : 'Belum digrading'),
                 $t->dibuat_pada?->locale('id')->translatedFormat('d M Y') ?? '-',
                 $jenis === 'riwayat'
                     ? ($t->selesai_pada?->locale('id')->translatedFormat('d M Y') ?? '-')

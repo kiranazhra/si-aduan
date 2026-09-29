@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\MediaAduan;
+use App\Enums\PrioritasAduan;
 use App\Http\Controllers\Controller;
 use App\Models\Aduan;
 use App\Models\Kategori;
@@ -89,11 +90,14 @@ class RekapController extends Controller
 
     public function kategori(Request $request)
     {
-        $u = $this->umum($request);
-        $q = $this->kataCari($request);
+        $u          = $this->umum($request);
+        $q          = $this->kataCari($request);
+        $kategoriId = $this->kategoriId($request);
 
-        $totalAduan = $this->dasar($u['tahun'], $u['bulan'], $u['tanggal'], $u['unitId'])->count();
-        $baris = $this->hitungPerGrup(Kategori::query(), $u, $q, $totalAduan);
+        // Halaman ini dikelompokkan per kategori, jadi filternya kategori (bukan unit).
+        // $totalAduan tetap dihitung dari SEMUA kategori supaya kolom % Total tidak berubah saat memilih satu kategori.
+        $totalAduan = $this->dasar($u['tahun'], $u['bulan'], $u['tanggal'])->count();
+        $baris = $this->hitungPerGrup(Kategori::query(), $u, $q, $totalAduan, 'aduan', $kategoriId);
 
         if ($this->ekspor($request)) {
             return CsvExport::unduh("rekap-kategori-{$u['tahun']}.csv",
@@ -102,11 +106,13 @@ class RekapController extends Controller
         }
 
         return view('admin.rekap.kategori', $u + [
-            'q'          => $q,
-            'baris'      => $baris,
-            'totalAduan' => $totalAduan,
+            'q'              => $q,
+            'baris'          => $baris,
+            'totalAduan'     => $totalAduan,
             'jumlahKategori' => Kategori::count(),
-            'tertinggi'  => (int) ($baris->max('total') ?? 0),
+            'tertinggi'      => (int) ($baris->max('total') ?? 0),
+            'kategoriId'     => $kategoriId,
+            'daftarKategori' => Kategori::orderBy('nama')->get(['id', 'nama']),
         ]);
     }
 
@@ -242,18 +248,15 @@ class RekapController extends Controller
         $u = $this->umum($request);
         $q = $this->kataCari($request);
 
-        // Grading membandingkan antar-unit, jadi filter unit_id sengaja TIDAK diterapkan di sini
-        // (kalau unit_id aktif, cukup satu baris yang muncul - itu tetap benar, hanya tidak difilter khusus)
-        $semua = $this->hitungGradingUnit($u['tahun'], $u['bulan'], $u['tanggal']);
+        $semua = $this->hitungGradingUnit($u['tahun'], $u['bulan'], $u['tanggal'], $u['unitId']);
         $baris = $q === ''
             ? $semua
             : $semua->filter(fn ($r) => str_contains(mb_strtolower($r->nama), mb_strtolower($q)))->values();
 
         if ($this->ekspor($request)) {
             return CsvExport::unduh("rekap-grading-unit-{$u['tahun']}.csv",
-                ['Unit', 'Total Aduan', 'Selesai', 'Belum Selesai', 'Waktu Rata-rata (hari)', 'Grade'],
-                $baris->map(fn ($r) => [$r->nama, $r->total, $r->selesai, $r->total - $r->selesai,
-                    $r->rata_hari === null ? '-' : $r->rata_hari, $r->grade['label']]));
+                ['Unit', 'Total Aduan', 'Merah (1x24 Jam)', 'Kuning (3 Hari Kerja)', 'Hijau (7 Hari Kerja)', 'Belum Digrading'],
+                $baris->map(fn ($r) => [$r->nama, $r->total, $r->merah, $r->kuning, $r->hijau, $r->kosong]));
         }
 
         return view('admin.rekap.grading', $u + [
@@ -261,9 +264,10 @@ class RekapController extends Controller
             'baris'  => $baris,
             'semua'  => $semua,
             'jumlah' => [
-                'baik'   => $baris->where('skor', '>=', 75)->count(),
-                'cukup'  => $baris->where('skor', '>=', 50)->where('skor', '<', 75)->count(),
-                'kurang' => $baris->where('skor', '<', 50)->count(),
+                'merah'  => $baris->sum('merah'),
+                'kuning' => $baris->sum('kuning'),
+                'hijau'  => $baris->sum('hijau'),
+                'kosong' => $baris->sum('kosong'),
             ],
         ]);
     }
@@ -424,6 +428,13 @@ class RekapController extends Controller
         return $u !== null && $u !== '' ? (int) $u : null;
     }
 
+    private function kategoriId(Request $request): ?int
+    {
+        $k = $request->query('kategori_id');
+
+        return $k !== null && $k !== '' ? (int) $k : null;
+    }
+
     /**
      * Rentang tanggal final, dengan prioritas:
      * tanggal (harian) > bulan+tahun > tahun penuh.
@@ -499,12 +510,13 @@ class RekapController extends Controller
      * $relasi: nama relasi yang dipakai untuk withCount — 'aduan' (default, dipakai Kategori
      * dan Unit-sebagai-penanganan) atau 'aduanLokasi' (Unit-sebagai-lokasi-kejadian).
      */
-    private function hitungPerGrup(Builder $master, array $u, string $q, int $totalAduan, string $relasi = 'aduan')
+    private function hitungPerGrup(Builder $master, array $u, string $q, int $totalAduan, string $relasi = 'aduan', ?int $filterId = null)
     {
         $p = $this->periode($u['tahun'], $u['bulan'], $u['tanggal']);
         $unitId = $u['unitId'];
 
         return $master
+            ->when($filterId, fn (Builder $x) => $x->where('id', $filterId))
             ->when($q !== '', fn (Builder $x) => $x->where('nama', 'like', "%{$q}%"))
             ->withCount([
                 "{$relasi} as total"           => fn ($x) => $x->whereBetween('dibuat_pada', $p)->when($unitId, fn ($y) => $y->where('unit_id', $unitId)),
@@ -519,40 +531,33 @@ class RekapController extends Controller
     }
 
     /**
-     * Grading unit. Skor 0-100 = 60% tingkat penyelesaian + 40% kecepatan.
-     * Kecepatan = 100 dikurangi 10 poin untuk setiap hari rata-rata penyelesaian (minimum 0).
-     * Sengaja tidak menerima $unitId - grading membandingkan SEMUA unit satu sama lain.
+     * Jumlah aduan per grading (Merah/Kuning/Hijau) di tiap unit.
+     * Grading berasal dari kolom `prioritas`, yang diisi Admin saat meneruskan tiket ke unit.
      */
-    private function hitungGradingUnit(int $tahun, ?int $bulan = null, ?string $tanggal = null)
+    private function hitungGradingUnit(int $tahun, ?int $bulan = null, ?string $tanggal = null, ?int $unitId = null)
     {
         $p = $this->periode($tahun, $bulan, $tanggal);
 
         $data = Aduan::query()->whereBetween('dibuat_pada', $p)->whereNotNull('unit_id')
-            ->selectRaw("unit_id, COUNT(*) AS total, SUM(status = 'selesai') AS selesai, "
-                . "AVG(CASE WHEN status = 'selesai' AND selesai_pada IS NOT NULL "
-                . "THEN TIMESTAMPDIFF(HOUR, dibuat_pada, selesai_pada) / 24 END) AS rata_hari")
+            ->when($unitId, fn ($q) => $q->where('unit_id', $unitId))
+            ->selectRaw("unit_id, COUNT(*) AS total, "
+                . "SUM(prioritas = '" . PrioritasAduan::Tinggi->value . "') AS merah, "
+                . "SUM(prioritas = '" . PrioritasAduan::Sedang->value . "') AS kuning, "
+                . "SUM(prioritas = '" . PrioritasAduan::Rendah->value . "') AS hijau, "
+                . "SUM(prioritas IS NULL) AS kosong")
             ->groupBy('unit_id')->get();
 
         $nama = Unit::whereIn('id', $data->pluck('unit_id'))->pluck('nama', 'id');
 
-        return $data->map(function ($d) use ($nama) {
-            $total     = (int) $d->total;
-            $selesai   = (int) $d->selesai;
-            $rata      = $d->rata_hari === null ? null : round((float) $d->rata_hari, 1);
-            $tingkat   = $total ? $selesai / $total * 100 : 0;
-            $kecepatan = $rata === null ? 0 : max(0, 100 - $rata * 10);
-            $skor      = (int) round(0.6 * $tingkat + 0.4 * $kecepatan);
-
-            return (object) [
-                'unit_id'   => $d->unit_id,
-                'nama'      => $nama[$d->unit_id] ?? 'Unit #' . $d->unit_id,
-                'total'     => $total,
-                'selesai'   => $selesai,
-                'rata_hari' => $rata,
-                'skor'      => $skor,
-                'grade'     => $this->grade($skor),
-            ];
-        })->sortByDesc('skor')->values();
+        return $data->map(fn ($d) => (object) [
+            'unit_id' => $d->unit_id,
+            'nama'    => $nama[$d->unit_id] ?? 'Unit #' . $d->unit_id,
+            'total'   => (int) $d->total,
+            'merah'   => (int) $d->merah,
+            'kuning'  => (int) $d->kuning,
+            'hijau'   => (int) $d->hijau,
+            'kosong'  => (int) $d->kosong,
+        ])->sortByDesc('total')->values();
     }
 
     /** Rata-rata dan sebaran bintang per unit. Aduan yang belum diteruskan ke unit ditampilkan sebagai satu baris terpisah. */
@@ -576,16 +581,6 @@ class RekapController extends Controller
         ])->sortByDesc('rata')->values();
     }
 
-    /** @return array{label:string, cls:string, bar:string} */
-    private function grade(int $skor): array
-    {
-        return match (true) {
-            $skor >= 75 => ['label' => 'Baik',   'cls' => 'bg-emerald-100 text-emerald-700', 'bar' => 'bg-emerald-500'],
-            $skor >= 50 => ['label' => 'Cukup',  'cls' => 'bg-amber-100 text-amber-700',     'bar' => 'bg-amber-400'],
-            default     => ['label' => 'Kurang', 'cls' => 'bg-red-100 text-red-700',         'bar' => 'bg-red-500'],
-        };
-    }
-
     /** Rekomendasi otomatis dari data (bukan teks tetap). */
     private function buatRekomendasi(int $tahun, int $total): array
     {
@@ -607,12 +602,12 @@ class RekapController extends Controller
             ];
         }
 
-        // 2. Unit paling lambat
-        $lambat = $this->hitungGradingUnit($tahun)->filter(fn ($r) => $r->rata_hari !== null)->sortByDesc('rata_hari')->first();
-        if ($lambat) {
+        // 2. Unit dengan aduan Merah (mendesak) terbanyak
+        $rawan = $this->hitungGradingUnit($tahun)->sortByDesc('merah')->first();
+        if ($rawan && $rawan->merah > 0) {
             $hasil[] = [
-                'head' => "Percepat penanganan di {$lambat->nama}",
-                'body' => "Rata-rata waktu penyelesaian {$lambat->rata_hari} hari, tertinggi di antara unit lain. Evaluasi alur koordinasi dan tindak lanjut.",
+                'head' => "Prioritaskan aduan Merah di {$rawan->nama}",
+                'body' => "Ada {$rawan->merah} aduan grading Merah (1×24 jam) di unit ini, terbanyak di antara unit lain. Pastikan penanganan tidak melewati batas waktu.",
             ];
         }
 
@@ -655,8 +650,8 @@ class RekapController extends Controller
                 $a->kategori->nama ?? '-',
                 $a->lokasi->nama ?? '-',
                 $a->unit->nama ?? '-',
-                ucfirst($a->status),
-                ucfirst($a->prioritas),
+                $a->status instanceof \App\Enums\StatusAduan ? $a->status->label() : ucfirst((string) $a->status),
+                $a->prioritas instanceof \App\Enums\PrioritasAduan ? $a->prioritas->label() : 'Belum digrading',
             ];
             if ($denganWaktu) {
                 $r[] = $a->lamaPenyelesaianHari() ?? '-';

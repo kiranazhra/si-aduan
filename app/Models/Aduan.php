@@ -6,6 +6,7 @@ use App\Enums\JenisRiwayat;
 use App\Enums\MediaAduan;
 use App\Enums\PrioritasAduan;
 use App\Enums\StatusAduan;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,10 +35,9 @@ class Aduan extends Model
 
     /** Nilai awal aduan baru (sama dengan default di database). */
     protected $attributes = [
-        'status'    => 'diproses',
-        'prioritas' => 'sedang',
-        'media'     => 'portal',
-        'anonim'    => false,
+        'status' => 'diproses',
+        'media'  => 'portal',
+        'anonim' => false,
     ];
 
     protected $fillable = [
@@ -180,17 +180,43 @@ class Aduan extends Model
             : $this->catat(JenisRiwayat::StatusDiubah, "Status diubah menjadi {$status->label()}", $oleh);
     }
 
-    /** Teruskan ke unit -> status otomatis 'Dikoordinasikan'. */
-    public function teruskanKe(Unit $unit, User $oleh): void
+    /**
+     * Teruskan ke unit -> status otomatis 'Dikoordinasikan'.
+     * Admin sekaligus menentukan grading (Merah/Kuning/Hijau) yang menjadi dasar batas waktu penanganan.
+     */
+    public function teruskanKe(Unit $unit, User $oleh, PrioritasAduan $grading): void
     {
         $this->update([
             'unit_id'         => $unit->id,
+            'prioritas'       => $grading,
             'diteruskan_oleh' => $oleh->id,
             'diteruskan_pada' => now(),
             'status'          => StatusAduan::Dikoordinasikan,
         ]);
 
-        $this->catat(JenisRiwayat::Diteruskan, "Diteruskan ke {$unit->nama}", $oleh, null, $unit->id);
+        $this->catat(
+            JenisRiwayat::Diteruskan,
+            "Diteruskan ke {$unit->nama} · Grading {$grading->label()} ({$grading->waktuLabel()})",
+            $oleh,
+            null,
+            $unit->id,
+        );
+    }
+
+    /** Batas akhir penanganan sesuai grading, dihitung sejak aduan diterima (null bila belum digrading). */
+    public function batasWaktu(): ?CarbonInterface
+    {
+        return ($this->prioritas instanceof PrioritasAduan && $this->dibuat_pada)
+            ? $this->prioritas->batasWaktu($this->dibuat_pada)
+            : null;
+    }
+
+    /** Sudah lewat batas waktu? Tiket selesai dinilai dari waktu selesainya, tiket berjalan dari waktu sekarang. */
+    public function melewatiBatas(): bool
+    {
+        $batas = $this->batasWaktu();
+
+        return $batas !== null && ($this->selesai_pada ?? now())->greaterThan($batas);
     }
 
     /** Tulisan penilaian, contoh: "Sangat Puas" (null bila pelapor tidak memberi penilaian). */

@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Enums\PrioritasAduan;
 use App\Models\Aduan;
 
 /**
@@ -37,8 +38,15 @@ class Wa
     }
 
     /** Pesan disposisi ke unit (sama dengan prototype). */
-    public static function pesanDisposisi(Aduan $aduan): string
+    public static function pesanDisposisi(Aduan $aduan, ?PrioritasAduan $grading = null, string $gradingTeks = '__GRADING__', string $batasTeks = '__BATAS__'): string
     {
+        // Bila grading diberikan, isi baris grading & batas waktu dari data aduan.
+        // Bila tidak, dipakai tanda __GRADING__ / __BATAS__ yang diganti di halaman saat Admin memilih grading.
+        if ($grading) {
+            $gradingTeks = "{$grading->label()} ({$grading->waktuLabel()})";
+            $batasTeks   = $grading->batasWaktu($aduan->dibuat_pada)->locale('id')->translatedFormat('d F Y · H.i');
+        }
+
         $ringkas = mb_strlen($aduan->uraian) > 160
             ? mb_substr($aduan->uraian, 0, 160) . '…'
             : $aduan->uraian;
@@ -47,7 +55,9 @@ class Wa
             . "No. Tiket   : {$aduan->nomor_tiket}\n"
             . 'Kategori    : ' . ($aduan->kategori->nama ?? '-') . "\n"
             . 'Lokasi      : ' . ($aduan->lokasi->nama ?? '-') . "\n"
-            . 'Tanggal     : ' . $aduan->tanggal_kejadian->locale('id')->translatedFormat('d F Y · H.i') . "\n\n"
+            . 'Tanggal     : ' . $aduan->tanggal_kejadian->locale('id')->translatedFormat('d F Y · H.i') . "\n"
+            . "Grading     : {$gradingTeks}\n"
+            . "Batas Waktu : {$batasTeks}\n\n"
             . "Isi Aduan:\n{$ringkas}\n\n"
             . "Mohon ditindaklanjuti sesuai prosedur yang berlaku.\n\n"
             . "Salam,\nAdmin RSUD H. Damanhuri Barabai";

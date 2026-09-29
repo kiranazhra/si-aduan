@@ -53,7 +53,7 @@
                 </div>
                 <div class="flex items-center gap-1.5">
                     <span class="material-icons-outlined text-slate-400 text-sm shrink-0">phone</span>
-                    (0517) 41004
+                    0852-4980-8800
                 </div>
                 <div class="flex items-center gap-1.5">
                     <span class="material-icons-outlined text-slate-400 text-sm shrink-0">mail</span>

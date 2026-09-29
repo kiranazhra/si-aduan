@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\JenisRiwayat;
 use App\Enums\PeranPengguna;
+use App\Enums\PrioritasAduan;
 use App\Enums\StatusAduan;
 use App\Http\Controllers\Controller;
 use App\Models\Aduan;
@@ -67,11 +68,29 @@ class TiketController extends Controller
             'langkah'        => $langkah,
             'bolehUbah'      => $request->user()->bolehKoordinasi(),
             'pesanDisposisi' => Wa::pesanDisposisi($aduan),
+            'opsiGrading'    => $this->opsiGrading($aduan),
             'templatSolusi'  => Wa::pesanSolusi($aduan, '__SOLUSI__'),
             'waPelapor'      => $aduan->anonim ? null : Wa::normalisasi($aduan->no_wa_pelapor),
             'jawabanUnit'    => $this->jawabanUnit($aduan),
             'pesanSolusiTerkirim' => $aduan->pesanWhatsapp()->where('jenis_penerima', 'pelapor')->latest('id')->first(),
         ]);
+    }
+
+    /**
+     * Pilihan grading untuk jendela "Teruskan ke Unit", lengkap dengan batas waktu masing-masing
+     * (dihitung sejak aduan diterima) supaya pratinjau pesan WhatsApp ikut berubah saat dipilih.
+     *
+     * @return array<int, array{nilai: string, label: string, keterangan: string, waktu: string, batas: string}>
+     */
+    private function opsiGrading(Aduan $aduan): array
+    {
+        return collect(PrioritasAduan::pilihan())->map(fn (PrioritasAduan $g) => [
+            'nilai'      => $g->value,
+            'label'      => $g->label(),
+            'keterangan' => $g->keterangan(),
+            'waktu'      => $g->waktuLabel(),
+            'batas'      => $g->batasWaktu($aduan->dibuat_pada)->locale('id')->translatedFormat('d F Y · H.i'),
+        ])->all();
     }
 
     /**
@@ -97,7 +116,7 @@ class TiketController extends Controller
         ] : null;
     }
 
-    /** Teruskan tiket ke unit (status otomatis menjadi Dikoordinasikan). */
+    /** Teruskan tiket ke unit + tentukan grading (status otomatis menjadi Dikoordinasikan). */
     public function teruskan(Request $request, Aduan $aduan)
     {
         $pengguna = $request->user();
@@ -108,27 +127,29 @@ class TiketController extends Controller
         }
 
         $data = $request->validate([
-            'unit_id' => ['required', Rule::exists('unit', 'id')->where('aktif', 1)],
-        ], PesanValidasi::UMUM, ['unit_id' => 'Unit tujuan']);
+            'unit_id'   => ['required', Rule::exists('unit', 'id')->where('aktif', 1)],
+            'prioritas' => ['required', Rule::in(array_column(PrioritasAduan::cases(), 'value'))],
+        ], PesanValidasi::UMUM, ['unit_id' => 'Unit tujuan', 'prioritas' => 'Grading']);
 
-        $unit = Unit::findOrFail($data['unit_id']);
+        $unit    = Unit::findOrFail($data['unit_id']);
+        $grading = PrioritasAduan::from($data['prioritas']);
         $aduan->loadMissing(['kategori', 'lokasi']);
 
-        DB::transaction(function () use ($aduan, $unit, $pengguna) {
-            $aduan->teruskanKe($unit, $pengguna);
+        DB::transaction(function () use ($aduan, $unit, $pengguna, $grading) {
+            $aduan->teruskanKe($unit, $pengguna, $grading);
 
             PesanWhatsapp::create([
                 'aduan_id'       => $aduan->id,
                 'dikirim_oleh'   => $pengguna->id,
                 'jenis_penerima' => 'unit',
                 'no_wa_penerima' => Wa::normalisasi($unit->no_wa) ?? '',
-                'isi_pesan'      => Wa::pesanDisposisi($aduan),
+                'isi_pesan'      => Wa::pesanDisposisi($aduan, $grading),
                 'status'         => 'dibuka',
             ]);
         });
 
         return redirect()->route('admin.tickets.show', ['aduan' => $aduan->nomor_tiket])
-            ->with('success', "Tiket diteruskan ke {$unit->nama}.");
+            ->with('success', "Tiket diteruskan ke {$unit->nama} dengan grading {$grading->label()} ({$grading->waktuLabel()}).");
     }
 
     /** Perbarui status (Diproses / Dikoordinasikan / Selesai) dengan catatan opsional. */

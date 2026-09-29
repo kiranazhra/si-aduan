@@ -16,7 +16,7 @@
     $pengaturanLabel = [
         'notifikasi_otomatis'  => 'Notifikasi WhatsApp otomatis ke pelapor saat status berubah',
         'tutup_otomatis'       => 'Tutup tiket otomatis setelah ' . $hariTutup . ' hari tanpa respons',
-        'peringatan_prioritas' => 'Kirim peringatan WhatsApp ke admin untuk tiket prioritas Tinggi',
+        'peringatan_prioritas' => 'Kirim peringatan WhatsApp ke admin untuk tiket grading Merah',
     ];
 
     // Data awal untuk jendela isian (dibuka kembali otomatis bila ada galat validasi)

@@ -16,9 +16,9 @@
 <div class="space-y-6">
     <div class="no-print">
     <x-admin.judul judul="Rekap Kategori Aduan" sub="Distribusi pengaduan berdasarkan kategori pelayanan">
-        <x-admin.filter-periode
-                :tahun="$tahun" :bulan="$bulan" :tanggal="$tanggal" :unitId="$unitId"
-                :daftarTahun="$daftarTahun" :daftarUnit="$daftarUnit" />
+        <x-admin.filter-periode-kategori
+                :tahun="$tahun" :bulan="$bulan" :tanggal="$tanggal" :kategoriId="$kategoriId"
+                :daftarTahun="$daftarTahun" :daftarKategori="$daftarKategori" />
     </x-admin.judul>
     </div>
 

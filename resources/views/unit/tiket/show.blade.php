@@ -70,7 +70,20 @@
             </div>
             <div>
                 <div class="text-xs text-slate-400 mb-0.5">Grading</div>
-                <x-admin.prioritas-badge :prioritas="$aduan->prioritas" />
+                <div class="flex flex-wrap items-center gap-2">
+                    <x-admin.prioritas-badge :prioritas="$aduan->prioritas" />
+                    @if ($aduan->prioritas)
+                        <span class="text-xs text-slate-500">{{ $aduan->prioritas->waktuLabel() }}</span>
+                    @endif
+                </div>
+                @if ($aduan->batasWaktu())
+                    <div class="text-xs mt-1 {{ $aduan->melewatiBatas() ? 'text-red-600 font-semibold' : 'text-slate-500' }}">
+                        Batas penyelesaian {{ $aduan->batasWaktu()->locale('id')->translatedFormat('d M Y · H.i') }}
+                        @if ($aduan->melewatiBatas())
+                            · {{ $aduan->selesai_pada ? 'selesai terlambat' : 'melewati batas' }}
+                        @endif
+                    </div>
+                @endif
             </div>
             <div>
                 <div class="text-xs text-slate-400 mb-0.5">Penilaian Pelayanan</div>

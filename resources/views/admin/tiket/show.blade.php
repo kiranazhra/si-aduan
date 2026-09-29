@@ -24,6 +24,8 @@
         ['n' => 4, 'label' => 'Solusi Dikirim',     'sub' => 'Jawaban dikirim ke WhatsApp pasien',  'ikon' => 'chat'],
     ];
 
+    $grading = $aduan->prioritas;
+    $batas   = $aduan->batasWaktu();
     $bolehTeruskan = $bolehUbah && $status !== 'selesai';
     $tampilUbahStatus = $bolehUbah && ! $aduan->solusi_dikirim_pada;
 @endphp
@@ -50,6 +52,30 @@
             <div class="flex items-center gap-2 px-3.5 py-2 rounded-full text-sm font-bold {{ $cfg['bg'] }} {{ $cfg['teks'] }}">
                 <span class="w-2 h-2 rounded-full {{ $cfg['titik'] }}"></span>{{ $cfg['label'] }}
             </div>
+        </div>
+
+        {{-- Grading & batas waktu penanganan --}}
+        <div class="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs">
+            <div class="flex items-center gap-2">
+                <span class="text-slate-400">Grading</span>
+                <x-admin.prioritas-badge :prioritas="$grading" />
+                @if ($grading)
+                    <span class="text-slate-500">{{ $grading->keterangan() }} · {{ $grading->waktuLabel() }}</span>
+                @endif
+            </div>
+            @if ($batas)
+                <div class="flex items-center gap-1.5 {{ $aduan->melewatiBatas() ? 'text-red-600 font-semibold' : 'text-slate-500' }}">
+                    <span class="material-icons-outlined" style="font-size: 14px;">schedule</span>
+                    Batas penyelesaian {{ $batas->locale('id')->translatedFormat('d M Y · H.i') }}
+                    @if ($aduan->melewatiBatas())
+                        · {{ $aduan->selesai_pada ? 'selesai terlambat' : 'melewati batas' }}
+                    @elseif ($aduan->selesai_pada)
+                        · selesai tepat waktu
+                    @endif
+                </div>
+            @else
+                <div class="text-slate-400">Grading ditentukan saat tiket diteruskan ke unit.</div>
+            @endif
         </div>
 
         @if ($bolehTeruskan)
@@ -250,7 +276,7 @@
             </div>
             <div>
                 <div class="text-sm font-bold text-amber-800 mb-1">Teruskan tiket ke unit terlebih dahulu</div>
-                <div class="text-sm text-amber-700">Sesuai alur penanganan, tiket harus diteruskan ke unit/poli terkait via WhatsApp sebelum solusi dapat dikirim ke pelapor.</div>
+                <div class="text-sm text-amber-700">Tentukan grading aduan (Merah, Kuning, atau Hijau), lalu teruskan ke unit/poli terkait via WhatsApp sebelum solusi dapat dikirim ke pelapor.</div>
                 <button type="button" @click="$dispatch('buka-teruskan')"
                         class="mt-3 inline-flex items-center gap-2 text-sm font-semibold bg-amber-600 text-white rounded-xl px-4 py-2 hover:bg-amber-700 transition">
                     <span class="material-icons-outlined" style="font-size: 16px;">send</span>
@@ -391,19 +417,34 @@
     @if ($bolehTeruskan)
         <div x-data="{
                 buka: false, unitId: '',
+                grading: @js($aduan->prioritas?->value ?? ''),
                 units: @js($units),
+                opsi: @js($opsiGrading),
+                warna: {
+                    tinggi: 'border-red-500 bg-red-50 text-red-700',
+                    sedang: 'border-amber-500 bg-amber-50 text-amber-700',
+                    rendah: 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                },
                 pesan: @js($pesanDisposisi),
                 get unit() { return this.units.find(u => u.id == this.unitId) || null; },
+                get gradingDipilih() { return this.opsi.find(o => o.nilai === this.grading) || null; },
+                get pesanFinal() {
+                    const g = this.gradingDipilih;
+                    return this.pesan
+                        .replace('__GRADING__', () => g ? g.label + ' (' + g.waktu + ')' : '(pilih grading)')
+                        .replace('__BATAS__', () => g ? g.batas : '-');
+                },
+                get siap() { return !!this.unitId && !!this.grading; },
                 kirim() {
-                    if (!this.unitId) return;
-                    window.open('https://wa.me/' + ((this.unit && this.unit.wa) || '') + '?text=' + encodeURIComponent(this.pesan), '_blank');
+                    if (!this.siap) return;
+                    window.open('https://wa.me/' + ((this.unit && this.unit.wa) || '') + '?text=' + encodeURIComponent(this.pesanFinal), '_blank');
                     this.$refs.form.submit();
                 }
              }"
              @buka-teruskan.window="buka = true" @keydown.escape.window="buka = false" x-cloak>
             <div x-show="buka" class="fixed inset-0 z-50 flex items-center justify-center p-4"
                  style="background-color: rgba(15,46,90,0.25); backdrop-filter: blur(2px);" @click.self="buka = false">
-                <div class="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-md p-6 space-y-5" style="animation: fadeIn .2s ease;">
+                <div class="bg-white rounded-2xl shadow-xl border border-slate-100 w-full max-w-md p-6 space-y-5 max-h-[calc(100vh-2rem)] overflow-y-auto" style="animation: fadeIn .2s ease;">
                     <div class="flex items-center justify-between">
                         <div class="text-base font-bold text-navy">Teruskan ke Unit</div>
                         <button type="button" @click="buka = false" class="text-slate-400 hover:text-slate-600 transition" aria-label="Tutup">
@@ -416,11 +457,30 @@
                         <x-admin.unit-picker :units="$units" x-model="unitId" placeholder="Cari unit tujuan…" />
                     </div>
 
+                    <div>
+                        <label class="block text-xs font-semibold mb-1.5 text-navy">Grading Aduan</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <template x-for="o in opsi" :key="o.nilai">
+                                <button type="button" @click="grading = o.nilai"
+                                        :class="grading === o.nilai ? warna[o.nilai] : 'border-slate-200 text-slate-600 hover:border-slate-300'"
+                                        class="border-2 rounded-xl px-2 py-2.5 text-center transition">
+                                    <div class="text-sm font-bold" x-text="o.label"></div>
+                                    <div class="text-[10px] leading-tight" x-text="o.keterangan"></div>
+                                    <div class="text-[10px] font-semibold mt-0.5" x-text="o.waktu"></div>
+                                </button>
+                            </template>
+                        </div>
+                        <div class="mt-2 text-xs text-slate-500" x-show="gradingDipilih" x-cloak>
+                            Batas penyelesaian: <span class="font-semibold text-navy" x-text="gradingDipilih && gradingDipilih.batas"></span>
+                            <span class="text-slate-400">(sejak aduan diterima)</span>
+                        </div>
+                    </div>
+
                     <div x-show="unitId" x-cloak>
                         <div class="text-xs text-slate-400 uppercase tracking-wider mb-2">Pratinjau Pesan WA ke Unit</div>
                         <div class="bg-[#e5ddd5] rounded-2xl p-4">
                             <div class="max-w-sm ml-auto">
-                                <div class="bg-white rounded-2xl rounded-tr-sm shadow-sm px-4 py-3 text-slate-700 leading-relaxed whitespace-pre-wrap font-mono text-xs" x-text="pesan"></div>
+                                <div class="bg-white rounded-2xl rounded-tr-sm shadow-sm px-4 py-3 text-slate-700 leading-relaxed whitespace-pre-wrap font-mono text-xs" x-text="pesanFinal"></div>
                             </div>
                         </div>
                         <div class="mt-2 text-xs" :class="unit && unit.wa ? 'text-slate-500' : 'text-amber-600'"
@@ -430,12 +490,13 @@
                     <form x-ref="form" method="POST" action="{{ route('admin.tickets.forward', ['aduan' => $aduan->nomor_tiket]) }}">
                         @csrf
                         <input type="hidden" name="unit_id" :value="unitId">
+                        <input type="hidden" name="prioritas" :value="grading">
                     </form>
 
                     <div class="flex gap-3 pt-1">
                         <button type="button" @click="buka = false"
                                 class="flex-1 border border-slate-200 text-slate-600 text-sm font-semibold py-2.5 rounded-xl hover:border-slate-300 transition">Batal</button>
-                        <button type="button" @click="kirim()" :disabled="!unitId"
+                        <button type="button" @click="kirim()" :disabled="!siap"
                                 class="flex-1 grad-btn text-white text-sm font-semibold py-2.5 rounded-xl disabled:opacity-40 transition flex items-center justify-center gap-1.5">
                             <span class="material-icons-outlined" style="font-size: 15px;">chat</span>Kirim ke Unit
                         </button>

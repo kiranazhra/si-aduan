@@ -39,7 +39,7 @@
             <table class="w-full text-sm">
                 <thead class="bg-slate-50 border-b border-slate-100">
                     <tr>
-                        @foreach (['No. Tiket', 'Pelapor', 'Kategori', 'Status', 'Tanggal', 'Aksi'] as $h)
+                        @foreach (['No. Tiket', 'Pelapor', 'Kategori', 'Grading', 'Status', 'Tanggal', 'Aksi'] as $h)
                             <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 whitespace-nowrap">{{ $h }}</th>
                         @endforeach
                     </tr>
@@ -50,6 +50,7 @@
                             <td class="py-3 px-4 font-bold text-xs font-mono text-navy whitespace-nowrap">{{ $t->nomor_tiket }}</td>
                             <td class="py-3 px-4 text-slate-600 text-xs">{{ $t->anonim ? 'Anonim' : $t->nama_pelapor }}</td>
                             <td class="py-3 px-4 text-slate-600 text-xs">{{ $t->kategori->nama ?? '-' }}</td>
+                            <td class="py-3 px-4"><x-admin.prioritas-badge :prioritas="$t->prioritas" /></td>
                             <td class="py-3 px-4"><x-admin.status-badge :status="$t->status" /></td>
                             <td class="py-3 px-4 text-slate-500 text-xs whitespace-nowrap">{{ $t->dibuat_pada?->locale('id')->translatedFormat('d M Y') }}</td>
                             <td class="py-3 px-4">
@@ -61,7 +62,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="py-10 text-center text-slate-400 text-sm">Tidak ada tiket yang sesuai filter.</td></tr>
+                        <tr><td colspan="7" class="py-10 text-center text-slate-400 text-sm">Tidak ada tiket yang sesuai filter.</td></tr>
                     @endforelse
                 </tbody>
             </table>
