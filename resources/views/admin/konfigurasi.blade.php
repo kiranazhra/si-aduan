@@ -13,12 +13,6 @@
 
     $deskripsiPeran = collect($peran)->mapWithKeys(fn ($p) => [$p->value => $p->deskripsi()])->all();
 
-    $pengaturanLabel = [
-        'notifikasi_otomatis'  => 'Notifikasi WhatsApp otomatis ke pelapor saat status berubah',
-        'tutup_otomatis'       => 'Tutup tiket otomatis setelah ' . $hariTutup . ' hari tanpa respons',
-        'peringatan_prioritas' => 'Kirim peringatan WhatsApp ke admin untuk tiket grading Merah',
-    ];
-
     // Data awal untuk jendela isian (dibuka kembali otomatis bila ada galat validasi)
     $modalLama = old('_modal');
     $awal = [
@@ -190,33 +184,6 @@
             @endforeach
         </div>
     </div>
-
-    {{-- ── Pengaturan Otomatis ────────────────────────── --}}
-    <form method="POST" action="{{ route('admin.config.settings') }}" x-ref="formPengaturan"
-          x-data="{ s: @js($pengaturan) }"
-          class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-        @csrf
-        <div class="text-sm font-bold mb-4 text-navy">Pengaturan Otomatis</div>
-        <div class="space-y-3">
-            @foreach ($pengaturanLabel as $kunci => $label)
-                <div class="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
-                    <span class="text-sm text-slate-600">{{ $label }}</span>
-                    <input type="hidden" name="{{ $kunci }}" :value="s.{{ $kunci }} ? 1 : 0">
-                    <button type="button" @if ($bolehUbah) @click="s.{{ $kunci }} = !s.{{ $kunci }}; $nextTick(() => $refs.formPengaturan.submit())" @else disabled @endif
-                            :class="s.{{ $kunci }} ? 'bg-emerald-500' : 'bg-slate-200'"
-                            class="w-11 h-6 rounded-full transition-colors relative shrink-0 ml-4 {{ $bolehUbah ? '' : 'opacity-60 cursor-not-allowed' }}"
-                            aria-label="{{ $label }}">
-                        <span class="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform"
-                              :class="s.{{ $kunci }} ? 'translate-x-5' : 'translate-x-0.5'"></span>
-                    </button>
-                </div>
-            @endforeach
-        </div>
-        <div class="mt-3 text-xs text-slate-400 leading-relaxed">
-            Pilihan ini disimpan di database. Menjalankan otomatisasinya (kirim WhatsApp otomatis dan tutup tiket terjadwal)
-            membutuhkan layanan tambahan dan belum aktif.
-        </div>
-    </form>
 
     {{-- ── Jendela: Unit ─────────────────────────────── --}}
     @if ($bolehUbah)

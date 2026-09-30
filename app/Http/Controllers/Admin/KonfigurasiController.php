@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\KelompokUnit;
 use App\Enums\PeranPengguna;
 use App\Http\Controllers\Controller;
-use App\Models\Pengaturan;
 use App\Models\Unit;
 use App\Models\User;
 use App\Support\PesanValidasi;
@@ -15,9 +14,6 @@ use Illuminate\Validation\Rule;
 
 class KonfigurasiController extends Controller
 {
-    /** Kunci pengaturan otomatis (tabel `pengaturan`). */
-    private const PENGATURAN = ['notifikasi_otomatis', 'tutup_otomatis', 'peringatan_prioritas'];
-
     public function index(Request $request)
     {
         $cari = trim((string) $request->query('cari_unit', ''));
@@ -50,12 +46,6 @@ class KonfigurasiController extends Controller
             'daftarUnit' => $daftarUnit,
             'peran'      => PeranPengguna::cases(),
             'kelompok'   => KelompokUnit::cases(),
-            'pengaturan' => [
-                'notifikasi_otomatis'  => Pengaturan::aktif('notifikasi_otomatis', true),
-                'tutup_otomatis'       => Pengaturan::aktif('tutup_otomatis', false),
-                'peringatan_prioritas' => Pengaturan::aktif('peringatan_prioritas', true),
-            ],
-            'hariTutup'  => (int) Pengaturan::ambil('tutup_otomatis_hari', 7),
             'bolehUbah'  => $request->user()->adalahSuperAdmin(),
         ]);
     }
@@ -169,18 +159,6 @@ class KonfigurasiController extends Controller
         $user->update($isi);
 
         return redirect()->route('admin.config')->with('success', 'Data staf diperbarui.');
-    }
-
-    // ── Pengaturan otomatis ─────────────────────────────────
-    public function simpanPengaturan(Request $request)
-    {
-        $this->hanyaSuperAdmin($request);
-
-        foreach (self::PENGATURAN as $nama) {
-            Pengaturan::simpan($nama, $request->boolean($nama));
-        }
-
-        return redirect()->route('admin.config')->with('success', 'Pengaturan disimpan.');
     }
 
     // ── Bantuan ─────────────────────────────────────────────

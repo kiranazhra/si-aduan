@@ -67,7 +67,6 @@ Route::middleware(['auth', AdminOnly::class])->prefix('admin')->name('admin.')->
     Route::put('/konfigurasi/unit/{unit}', [KonfigurasiController::class, 'ubahUnit'])->name('config.unit.update');
     Route::post('/konfigurasi/staf', [KonfigurasiController::class, 'simpanStaf'])->name('config.staff.store');
     Route::put('/konfigurasi/staf/{user}', [KonfigurasiController::class, 'ubahStaf'])->name('config.staff.update');
-    Route::post('/konfigurasi/pengaturan', [KonfigurasiController::class, 'simpanPengaturan'])->name('config.settings');
 
     // Profil
     Route::get('/profil', [ProfilController::class, 'index'])->name('profile');
