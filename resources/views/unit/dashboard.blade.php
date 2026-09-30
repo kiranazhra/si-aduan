@@ -25,9 +25,11 @@
                 <span class="text-xs font-semibold text-slate-500">{{ $pengguna->unit->nama ?? 'Unit belum ditetapkan' }}</span>
             </div>
             <h1 class="text-2xl font-extrabold text-navy">Dashboard Unit</h1>
+        </div>
+        <div class="text-right mt-1">
+            <div class="text-xs text-slate-400">{{ now()->locale('id')->translatedFormat('l, j F Y') }}</div>
             <p class="text-sm text-slate-500 mt-0.5">Selamat datang, <span class="font-semibold">{{ $pengguna->name }}</span></p>
         </div>
-        <div class="text-xs text-slate-400 text-right mt-1">{{ now()->locale('id')->translatedFormat('l, j F Y') }}</div>
     </div>
 
     {{-- Kartu ringkasan --}}
@@ -55,7 +57,7 @@
                     <div class="flex items-center gap-3 text-xs">
                         <div class="w-28 shrink-0 text-slate-500"><span class="font-bold text-navy">{{ $s->nilai }}</span> · {{ $s->label }}</div>
                         <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                            <div class="h-full rounded-full {{ $warnaBar[$s->nilai] }}" style="width: {{ $s->pct }}%;"></div>
+                            <div class="h-full rounded-full {{ $warnaBar[$s->nilai] }}" @style(['width: ' . $s->pct . '%'])></div>
                         </div>
                         <div class="w-8 text-right tabular-nums text-slate-600 font-semibold">{{ $s->jumlah }}</div>
                     </div>
