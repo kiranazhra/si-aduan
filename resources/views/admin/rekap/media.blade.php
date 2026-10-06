@@ -22,12 +22,12 @@
             <button type="button" @click="{{ \App\Support\RekapUi::detail($r->nama, 'media', $r->kode, $tahun, $bulan, $tanggal, $unitId) }}"
                     class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 text-left hover:border-navy hover:shadow-md transition-all group">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style="background-color: {{ $r->warna }}20; color: {{ $r->warna }};">
-                    <span class="material-icons-outlined" style="font-size: 18px;">{{ $r->ikon }}</span>
+                    <span class="material-icons-outlined" style="font-size: 20px;">{{ $r->ikon }}</span>
                 </div>
                 <div class="text-3xl font-extrabold text-navy">{{ $r->total }}</div>
                 <div class="text-xs text-slate-500 mt-0.5">{{ $r->nama }}</div>
-                <div class="text-[10px] mt-1 opacity-0 group-hover:opacity-100 transition flex items-center gap-0.5" style="color: {{ $r->warna }};">
-                    <span class="material-icons-outlined" style="font-size: 11px;">open_in_new</span>Lihat detail
+                <div class="text-[12px] mt-1 opacity-0 group-hover:opacity-100 transition flex items-center gap-0.5" style="color: {{ $r->warna }};">
+                    <span class="material-icons-outlined" style="font-size: 13px;">open_in_new</span>Lihat detail
                 </div>
             </button>
         @endforeach
@@ -62,7 +62,7 @@
                                 <td class="no-print py-3 px-4">
                                     <button type="button" @click="{{ \App\Support\RekapUi::detail($r->nama, 'media', $r->kode, $tahun, $bulan, $tanggal, $unitId) }}"
                                             class="text-xs text-emerald-700 border border-emerald-200 rounded-lg px-2.5 py-1 hover:bg-emerald-50 transition font-semibold flex items-center gap-1">
-                                        <span class="material-icons-outlined" style="font-size: 13px;">open_in_new</span>Detail
+                                        <span class="material-icons-outlined" style="font-size: 15px;">open_in_new</span>Detail
                                     </button>
                                 </td>
                             </tr>

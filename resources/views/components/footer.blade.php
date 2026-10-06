@@ -81,9 +81,9 @@
                         allowfullscreen
                         referrerpolicy="no-referrer-when-downgrade"></iframe>
                 <a href="{{ $urlMaps }}" target="_blank" rel="noopener"
-                   class="absolute top-2 left-2 bg-white text-[10px] font-semibold text-[#1565C0] rounded-md shadow px-2 py-1 inline-flex items-center gap-1 hover:bg-slate-50 transition-colors">
+                   class="absolute top-2 left-2 bg-white text-[12px] font-semibold text-[#1565C0] rounded-md shadow px-2 py-1 inline-flex items-center gap-1 hover:bg-slate-50 transition-colors">
                     Buka di Maps
-                    <span class="material-icons-outlined" style="font-size: 12px;">open_in_new</span>
+                    <span class="material-icons-outlined" style="font-size: 14px;">open_in_new</span>
                 </a>
             </div>
         </div>

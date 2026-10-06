@@ -28,14 +28,14 @@
         </div>
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
             <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3 bg-blue-50 text-blue-600">
-                <span class="material-icons-outlined" style="font-size: 18px;">rate_review</span>
+                <span class="material-icons-outlined" style="font-size: 20px;">rate_review</span>
             </div>
             <div class="text-3xl font-extrabold text-navy">{{ $totalUlasan }}</div>
             <div class="text-xs text-slate-500 mt-0.5">Total Ulasan <span class="text-slate-400">(dari {{ $totalAduan }} aduan)</span></div>
         </div>
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
             <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3 bg-emerald-50 text-emerald-600">
-                <span class="material-icons-outlined" style="font-size: 18px;">thumb_up</span>
+                <span class="material-icons-outlined" style="font-size: 20px;">thumb_up</span>
             </div>
             <div class="text-3xl font-extrabold text-navy">{{ $persenPuas }}%</div>
             <div class="text-xs text-slate-500 mt-0.5">Puas &amp; Sangat Puas</div>
@@ -100,13 +100,13 @@
                             <td class="no-print py-3 px-4">
                                 <button type="button" @click="{{ \App\Support\RekapUi::detail($r->nama, 'ratingunit', $r->unit_id, $tahun, $bulan, $tanggal, null) }}"
                                         class="text-xs text-emerald-700 border border-emerald-200 rounded-lg px-2.5 py-1 hover:bg-emerald-50 transition font-semibold whitespace-nowrap flex items-center gap-1">
-                                    <span class="material-icons-outlined" style="font-size: 13px;">open_in_new</span>Detail
+                                    <span class="material-icons-outlined" style="font-size: 15px;">open_in_new</span>Detail
                                 </button>
                             </td>
                         </tr>
                     @empty
                         <tr><td colspan="9" class="py-10 text-center text-slate-400 text-sm">
-                            <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 36px;">star_border</span>
+                            <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 38px;">star_border</span>
                             Belum ada penilaian pada periode ini.
                         </td></tr>
                     @endforelse

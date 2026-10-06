@@ -16,6 +16,6 @@
     <a href="{{ $tujuan }}" title="Kembali" aria-label="Kembali"
        onclick="try{var u=new URL(document.referrer);if(u.origin===location.origin&&/^\/(admin|unit)(\/|$)/.test(u.pathname)&&!/\/dashboard$/.test(u.pathname)&&u.pathname!==location.pathname){location.href=document.referrer;return false;}}catch(e){}return true;"
        class="shrink-0 mt-0.5 inline-flex items-center justify-center w-9 h-9 rounded-xl bg-white border border-slate-200 text-slate-500 hover:border-navy hover:text-navy hover:bg-slate-50 transition print:hidden">
-        <span class="material-icons-outlined" style="font-size: 20px;">arrow_back</span>
+        <span class="material-icons-outlined" style="font-size: 22px;">arrow_back</span>
     </a>
 @endif

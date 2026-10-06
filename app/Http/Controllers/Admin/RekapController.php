@@ -278,9 +278,8 @@ class RekapController extends Controller
         $q = $this->kataCari($request);
         $dasar = fn () => $this->dasar($u['tahun'], $u['bulan'], $u['tanggal'], $u['unitId']);
 
-        $total   = $dasar()->count();
-        $selesai = $dasar()->where('status', 'selesai')->count();
-        $belum   = $total - $selesai;
+        $perStatus = $dasar()
+            ->selectRaw('status, COUNT(*) AS jumlah')->groupBy('status')->pluck('jumlah', 'status');
 
         $tabel = $dasar()->with(['kategori', 'lokasi', 'unit'])
             ->when($q !== '', fn (Builder $x) => $this->cariTiket($x, $q))
@@ -291,13 +290,14 @@ class RekapController extends Controller
         }
 
         return view('admin.rekap.kesimpulan', $u + [
-            'q'           => $q,
-            'total'       => $total,
-            'selesai'     => $selesai,
-            'belum'       => $belum,
-            'persenSelesai' => $total ? (int) round($selesai / $total * 100) : 0,
-            'rekomendasi' => $this->buatRekomendasi($u['tahun'], $total),
-            'tiket'       => (clone $tabel)->paginate(15)->withQueryString(),
+            'q'         => $q,
+            'total'     => (int) $perStatus->sum(),
+            'perStatus' => [
+                'diproses'        => (int) ($perStatus['diproses'] ?? 0),
+                'dikoordinasikan' => (int) ($perStatus['dikoordinasikan'] ?? 0),
+                'selesai'         => (int) ($perStatus['selesai'] ?? 0),
+            ],
+            'tiket'     => (clone $tabel)->paginate(15)->withQueryString(),
         ]);
     }
 
@@ -312,7 +312,7 @@ class RekapController extends Controller
             ['nama' => 'Rekap Lokasi / Ruangan',  'ket' => 'Jumlah aduan per lokasi kejadian',           'rute' => 'admin.recap.room'],
             ['nama' => 'Grading Unit',            'ket' => 'Penilaian kinerja setiap unit pelayanan',    'rute' => 'admin.recap.grading'],
             ['nama' => 'Rating Pelayanan',        'ket' => 'Penilaian bintang dari pelapor per unit',    'rute' => 'admin.recap.rating'],
-            ['nama' => 'Kesimpulan & Rekomendasi', 'ket' => 'Daftar tiket lengkap beserta waktu selesai', 'rute' => 'admin.recap.conclusion'],
+            ['nama' => 'Kesimpulan',               'ket' => 'Total per status dan daftar tiket lengkap beserta waktu selesai', 'rute' => 'admin.recap.conclusion'],
         ];
 
         if ($q !== '') {
@@ -579,59 +579,6 @@ class RekapController extends Controller
             'rata'    => round((float) $d->rata, 2),
             'per'     => [5 => (int) $d->r5, 4 => (int) $d->r4, 3 => (int) $d->r3, 2 => (int) $d->r2, 1 => (int) $d->r1],
         ])->sortByDesc('rata')->values();
-    }
-
-    /** Rekomendasi otomatis dari data (bukan teks tetap). */
-    private function buatRekomendasi(int $tahun, int $total): array
-    {
-        if ($total === 0) {
-            return [['head' => 'Belum ada data', 'body' => "Belum ada aduan pada tahun {$tahun}. Rekomendasi akan muncul otomatis setelah ada aduan masuk."]];
-        }
-
-        $hasil = [];
-
-        // 1. Kategori tertinggi
-        $kat = Kategori::query()
-            ->withCount(['aduan as total' => fn ($x) => $x->whereBetween('dibuat_pada', $this->periode($tahun))])
-            ->get()->sortByDesc('total')->first();
-        if ($kat && $kat->total > 0) {
-            $pct = (int) round($kat->total / $total * 100);
-            $hasil[] = [
-                'head' => "Evaluasi layanan pada kategori {$kat->nama}",
-                'body' => "Kategori ini mendominasi {$pct}% aduan ({$kat->total} dari {$total} tiket). Tinjau SOP dan jadwalkan pelatihan bagi petugas terkait.",
-            ];
-        }
-
-        // 2. Unit dengan aduan Merah (mendesak) terbanyak
-        $rawan = $this->hitungGradingUnit($tahun)->sortByDesc('merah')->first();
-        if ($rawan && $rawan->merah > 0) {
-            $hasil[] = [
-                'head' => "Prioritaskan aduan Merah di {$rawan->nama}",
-                'body' => "Ada {$rawan->merah} aduan grading Merah (1×24 jam) di unit ini, terbanyak di antara unit lain. Pastikan penanganan tidak melewati batas waktu.",
-            ];
-        }
-
-        // 3. Aduan menumpuk > 7 hari
-        $lama = $this->dasar($tahun)->where('status', '!=', 'selesai')
-            ->where('dibuat_pada', '<', now()->subDays(7))->count();
-        if ($lama > 0) {
-            $hasil[] = [
-                'head' => 'Tindak lanjuti aduan yang belum selesai',
-                'body' => "Ada {$lama} aduan yang belum selesai lebih dari 7 hari. Lakukan pengingat ke unit terkait dan eskalasi bila perlu.",
-            ];
-        }
-
-        // 4. Saluran non-portal
-        $nonPortal = $this->dasar($tahun)->where('media', '!=', 'portal')->count();
-        if ($nonPortal > 0) {
-            $pct = (int) round($nonPortal / $total * 100);
-            $hasil[] = [
-                'head' => 'Sosialisasikan portal digital ke pasien',
-                'body' => "{$nonPortal} aduan ({$pct}%) masuk lewat saluran non-portal (WhatsApp, email, kotak saran). Pasang QR code portal di area strategis agar aduan tercatat dan mudah dilacak.",
-            ];
-        }
-
-        return $hasil ?: [['head' => 'Kinerja penanganan baik', 'body' => 'Tidak ada temuan yang perlu ditindaklanjuti saat ini.']];
     }
 
     private function csvTiket(string $namaFile, Builder $tabel, bool $denganWaktu = false)

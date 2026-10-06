@@ -61,13 +61,13 @@
                             <td class="no-print py-3 px-4">
                                 <button type="button" @click="{{ \App\Support\RekapUi::detail($u->nama, 'unit', $u->unit_id, $tahun, $bulan, $tanggal, $unitId) }}"
                                         class="text-xs text-emerald-700 border border-emerald-200 rounded-lg px-2.5 py-1 hover:bg-emerald-50 transition font-semibold whitespace-nowrap flex items-center gap-1">
-                                    <span class="material-icons-outlined" style="font-size: 13px;">open_in_new</span>Detail
+                                    <span class="material-icons-outlined" style="font-size: 15px;">open_in_new</span>Detail
                                 </button>
                             </td>
                         </tr>
                     @empty
                         <tr><td colspan="7" class="py-10 text-center text-slate-400 text-sm">
-                            <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 36px;">search_off</span>
+                            <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 38px;">search_off</span>
                             Belum ada tiket yang diteruskan ke unit pada tahun {{ $tahun }}.
                         </td></tr>
                     @endforelse

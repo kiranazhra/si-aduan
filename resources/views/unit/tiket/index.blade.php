@@ -13,7 +13,7 @@
     <form method="GET" action="{{ route('unit.tickets') }}"
           class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-wrap gap-3">
         <div class="flex items-center gap-2 flex-1 min-w-40">
-            <span class="material-icons-outlined text-slate-400" style="font-size: 18px;">search</span>
+            <span class="material-icons-outlined text-slate-400" style="font-size: 20px;">search</span>
             <input type="text" name="q" value="{{ $q }}" placeholder="Cari no. tiket atau judul..."
                    class="flex-1 text-sm focus:outline-none text-slate-700 placeholder:text-slate-400">
         </div>
@@ -33,7 +33,7 @@
 
         @if ($q !== '' || $status !== '' || \App\Support\PeriodeFilter::aktif($f))
             <a href="{{ route('unit.tickets') }}" class="text-sm text-slate-500 hover:text-slate-700 flex items-center gap-1 self-center">
-                <span class="material-icons-outlined" style="font-size: 16px;">close</span> Reset
+                <span class="material-icons-outlined" style="font-size: 18px;">close</span> Reset
             </a>
         @endif
     </form>
@@ -63,13 +63,13 @@
                                 @if ($t->status !== \App\Enums\StatusAduan::Selesai)
                                     <a href="{{ route('unit.tickets.show', ['aduan' => $t->nomor_tiket]) }}"
                                        class="inline-flex items-center gap-1 text-xs text-white grad-btn font-semibold px-3 py-1.5 rounded-lg hover:opacity-90 transition">
-                                        <span class="material-icons-outlined" style="font-size: 13px;">reply</span>
+                                        <span class="material-icons-outlined" style="font-size: 15px;">reply</span>
                                         Tanggapi
                                     </a>
                                 @else
                                     <a href="{{ route('unit.tickets.show', ['aduan' => $t->nomor_tiket]) }}"
                                        class="inline-flex items-center gap-1 text-xs text-slate-500 border border-slate-200 font-semibold px-3 py-1.5 rounded-lg hover:border-slate-300 transition">
-                                        <span class="material-icons-outlined" style="font-size: 13px;">visibility</span>
+                                        <span class="material-icons-outlined" style="font-size: 15px;">visibility</span>
                                         Lihat
                                     </a>
                                 @endif
@@ -78,7 +78,7 @@
                     @empty
                         <tr>
                             <td colspan="6" class="py-10 text-center text-slate-400 text-sm">
-                                <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 36px;">search_off</span>
+                                <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 38px;">search_off</span>
                                 Tidak ada tiket yang sesuai filter.
                             </td>
                         </tr>

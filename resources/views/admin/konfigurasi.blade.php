@@ -38,7 +38,7 @@
 
     @unless ($bolehUbah)
         <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 text-slate-500 text-xs rounded-xl px-4 py-3">
-            <span class="material-icons-outlined" style="font-size: 16px;">lock</span>
+            <span class="material-icons-outlined" style="font-size: 18px;">lock</span>
             Hanya Super Admin yang dapat mengubah konfigurasi. Anda dapat melihat datanya saja.
         </div>
     @endunless
@@ -52,19 +52,19 @@
             </div>
             <div class="flex items-center gap-2">
                 <form method="GET" action="{{ route('admin.config') }}" class="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-1.5">
-                    <span class="material-icons-outlined text-slate-400" style="font-size: 15px;">search</span>
+                    <span class="material-icons-outlined text-slate-400" style="font-size: 17px;">search</span>
                     <input type="text" name="cari_unit" value="{{ $cari }}" placeholder="Cari unit…"
                            class="w-36 text-xs focus:outline-none text-slate-700 placeholder:text-slate-400">
                     @if ($cari !== '')
                         <a href="{{ route('admin.config') }}" class="text-slate-400 hover:text-slate-600" title="Hapus pencarian">
-                            <span class="material-icons-outlined" style="font-size: 14px;">close</span>
+                            <span class="material-icons-outlined" style="font-size: 16px;">close</span>
                         </a>
                     @endif
                 </form>
                 @if ($bolehUbah)
                     <button type="button" @click="unitBaru()"
                             class="text-xs text-emerald-700 font-semibold border border-emerald-200 rounded-lg px-3 py-1.5 hover:bg-emerald-50 transition flex items-center gap-1">
-                        <span class="material-icons-outlined" style="font-size: 14px;">add</span>
+                        <span class="material-icons-outlined" style="font-size: 16px;">add</span>
                         Tambah Unit
                     </button>
                 @endif
@@ -86,10 +86,10 @@
                             <td class="py-3 px-3">
                                 <div class="font-semibold text-navy">{{ $u->nama }}
                                     @unless ($u->aktif)
-                                        <span class="ml-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500">Nonaktif</span>
+                                        <span class="ml-1 text-[12px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500">Nonaktif</span>
                                     @endunless
                                 </div>
-                                <div class="text-[11px] text-slate-400 font-mono">{{ $u->kode }} · {{ $u->kelompok->label() }}</div>
+                                <div class="text-[13px] text-slate-400 font-mono">{{ $u->kode }} · {{ $u->kelompok->label() }}</div>
                             </td>
                             <td class="py-3 px-3 text-slate-600">{{ $u->penanggung_jawab ?: '—' }}</td>
                             <td class="py-3 px-3 text-slate-600 font-mono text-xs">{{ $u->no_wa ? '+' . $u->no_wa : '—' }}</td>
@@ -97,7 +97,7 @@
                                 @if ($bolehUbah)
                                     <button type="button" class="text-slate-400 hover:text-navy transition" title="Ubah"
                                             @click="ubahUnit(@js(['id' => $u->id, 'kode' => $u->kode, 'nama' => $u->nama, 'kelompok' => $u->kelompok->value, 'penanggung_jawab' => $u->penanggung_jawab ?? '', 'no_wa' => $u->no_wa ?? '', 'aktif' => (bool) $u->aktif]))">
-                                        <span class="material-icons-outlined" style="font-size: 15px;">edit</span>
+                                        <span class="material-icons-outlined" style="font-size: 17px;">edit</span>
                                     </button>
                                 @endif
                             </td>
@@ -118,7 +118,7 @@
             @if ($bolehUbah)
                 <button type="button" @click="stafBaru()"
                         class="text-xs text-emerald-700 font-semibold border border-emerald-200 rounded-lg px-3 py-1.5 hover:bg-emerald-50 transition flex items-center gap-1">
-                    <span class="material-icons-outlined" style="font-size: 14px;">person_add</span>
+                    <span class="material-icons-outlined" style="font-size: 16px;">person_add</span>
                     Tambah Staf
                 </button>
             @endif
@@ -145,10 +145,10 @@
                             <td class="py-3 px-3">
                                 <div class="font-semibold text-navy">{{ $s->name }}
                                     @unless ($s->aktif)
-                                        <span class="ml-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500">Nonaktif</span>
+                                        <span class="ml-1 text-[12px] font-bold px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-500">Nonaktif</span>
                                     @endunless
                                 </div>
-                                <div class="text-[11px] text-slate-400">{{ $s->email }}</div>
+                                <div class="text-[13px] text-slate-400">{{ $s->email }}</div>
                             </td>
                             <td class="py-3 px-3">
                                 <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ $lencanaPeran[$s->peran->value] }}">{{ $s->peran->label() }}</span>
@@ -165,7 +165,7 @@
                                 @if ($bolehUbah)
                                     <button type="button" class="text-slate-400 hover:text-navy transition" title="Ubah"
                                             @click="ubahStaf(@js(['id' => $s->id, 'name' => $s->name, 'email' => $s->email, 'password' => '', 'peran' => $s->peran->value, 'unit_id' => $s->unit_id ?? '', 'no_wa' => $s->no_wa ?? '', 'aktif' => (bool) $s->aktif]))">
-                                        <span class="material-icons-outlined" style="font-size: 15px;">edit</span>
+                                        <span class="material-icons-outlined" style="font-size: 17px;">edit</span>
                                     </button>
                                 @endif
                             </td>
@@ -200,7 +200,7 @@
                 <div class="flex items-center justify-between">
                     <div class="text-base font-bold text-navy" x-text="unit.id ? 'Ubah Unit' : 'Tambah Unit'"></div>
                     <button type="button" @click="modal = null" class="text-slate-400 hover:text-slate-600 transition" aria-label="Tutup">
-                        <span class="material-icons-outlined" style="font-size: 20px;">close</span>
+                        <span class="material-icons-outlined" style="font-size: 22px;">close</span>
                     </button>
                 </div>
 
@@ -269,7 +269,7 @@
                 <div class="flex items-center justify-between">
                     <div class="text-base font-bold text-navy" x-text="staf.id ? 'Ubah Staf' : 'Tambah Staf'"></div>
                     <button type="button" @click="modal = null" class="text-slate-400 hover:text-slate-600 transition" aria-label="Tutup">
-                        <span class="material-icons-outlined" style="font-size: 20px;">close</span>
+                        <span class="material-icons-outlined" style="font-size: 22px;">close</span>
                     </button>
                 </div>
 

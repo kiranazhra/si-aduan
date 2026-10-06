@@ -51,7 +51,7 @@
                             <td class="py-3 px-4 font-semibold text-navy">
                                 <div class="flex items-center gap-2">
                                     @if ($tertinggiIni)
-                                        <span class="material-icons-outlined text-red-400" style="font-size: 14px;">warning</span>
+                                        <span class="material-icons-outlined text-red-400" style="font-size: 16px;">warning</span>
                                     @endif
                                     {{ $r->nama }}
                                 </div>
@@ -63,7 +63,7 @@
                             <td class="no-print py-3 px-4">
                                 <button type="button" @click="{{ \App\Support\RekapUi::detail($r->nama, 'lokasi', $r->id, $tahun, $bulan, $tanggal, $unitId) }}"
                                         class="text-xs text-emerald-700 border border-emerald-200 rounded-lg px-2.5 py-1 hover:bg-emerald-50 transition font-semibold flex items-center gap-1 whitespace-nowrap">
-                                    <span class="material-icons-outlined" style="font-size: 13px;">open_in_new</span>Detail
+                                    <span class="material-icons-outlined" style="font-size: 15px;">open_in_new</span>Detail
                                 </button>
                             </td>
                         </tr>

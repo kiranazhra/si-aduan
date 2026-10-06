@@ -10,7 +10,7 @@
         ['ikon' => 'grade',     'label' => 'Grading Unit',     'ket' => 'Jumlah aduan per grading Merah/Kuning/Hijau di tiap unit',   'rute' => 'admin.recap.grading'],
         ['ikon' => 'star',      'label' => 'Rating Pelayanan', 'ket' => 'Penilaian bintang dari pelapor, per unit',  'rute' => 'admin.recap.rating'],
         ['ikon' => 'place',     'label' => 'Lokasi / Ruangan', 'ket' => 'Distribusi pengaduan per area rumah sakit', 'rute' => 'admin.recap.room'],
-        ['ikon' => 'insights',  'label' => 'Kesimpulan',       'ket' => 'Analisis dan rekomendasi tindak lanjut',    'rute' => 'admin.recap.conclusion'],
+        ['ikon' => 'insights',  'label' => 'Kesimpulan',       'ket' => 'Total per status dan daftar tiket lengkap', 'rute' => 'admin.recap.conclusion'],
         ['ikon' => 'folder_open', 'label' => 'Berkas Rekap',   'ket' => 'Unduh laporan Excel dan PDF',               'rute' => 'admin.recap.files'],
     ];
 @endphp
@@ -23,7 +23,7 @@
             <a href="{{ route($b['rute'], ['tahun' => $tahun]) }}"
                class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 text-left hover:border-navy hover:shadow-md transition-all group">
                 <div class="w-10 h-10 rounded-xl grad-btn flex items-center justify-center mb-3 group-hover:opacity-90 transition">
-                    <span class="material-icons-outlined text-white" style="font-size: 20px;">{{ $b['ikon'] }}</span>
+                    <span class="material-icons-outlined text-white" style="font-size: 22px;">{{ $b['ikon'] }}</span>
                 </div>
                 <div class="text-sm font-bold mb-1 text-navy">{{ $b['label'] }}</div>
                 <div class="text-xs text-slate-500 leading-snug">{{ $b['ket'] }}</div>

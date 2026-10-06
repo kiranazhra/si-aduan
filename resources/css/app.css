@@ -3,6 +3,17 @@
 
 @theme {
     --color-navy: #0f2e5a;
+
+    /* Skala font diperbesar (default Tailwind -> lebih besar) */
+    --text-xs: 0.875rem;
+    --text-sm: 1rem;
+    --text-base: 1.125rem;
+    --text-lg: 1.25rem;
+    --text-xl: 1.5rem;
+    --text-2xl: 1.75rem;
+    --text-3xl: 2.125rem;
+    --text-4xl: 2.5rem;
+    --text-5xl: 3.25rem;
 }
 
 .grad-btn {

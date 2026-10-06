@@ -48,7 +48,7 @@
     @if ($tanggal || $bulan || $unitId)
         <a href="{{ url()->current() }}?tahun={{ $tahun }}"
            class="text-xs text-slate-400 hover:text-red-500 flex items-center gap-1 px-2">
-            <span class="material-icons-outlined" style="font-size:14px;">close</span>Reset
+            <span class="material-icons-outlined" style="font-size: 16px;">close</span>Reset
         </a>
     @endif
 </form>

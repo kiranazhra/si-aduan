@@ -36,12 +36,12 @@
             <button type="button" @click="{{ \App\Support\RekapUi::detail($k['label'], $k['by'], $k['v'], $tahun, $bulan, $tanggal, $unitId) }}"
                     class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 text-left hover:border-navy hover:shadow-md transition-all group">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3 {{ $k['warna'] }}">
-                    <span class="material-icons-outlined" style="font-size: 18px;">{{ $k['ikon'] }}</span>
+                    <span class="material-icons-outlined" style="font-size: 20px;">{{ $k['ikon'] }}</span>
                 </div>
                 <div class="text-3xl font-extrabold text-navy">{{ $k['nilai'] }}</div>
                 <div class="text-xs text-slate-500 mt-0.5">{{ $k['label'] }}</div>
-                <div class="text-[10px] text-emerald-600 mt-1 opacity-0 group-hover:opacity-100 transition flex items-center gap-0.5">
-                    <span class="material-icons-outlined" style="font-size: 11px;">open_in_new</span>Lihat detail
+                <div class="text-[12px] text-emerald-600 mt-1 opacity-0 group-hover:opacity-100 transition flex items-center gap-0.5">
+                    <span class="material-icons-outlined" style="font-size: 13px;">open_in_new</span>Lihat detail
                 </div>
             </button>
         @endforeach
@@ -54,12 +54,12 @@
             <div class="flex gap-1.5 h-40">
                 @foreach ($perBulan as $i => $v)
                     <div class="flex-1 flex flex-col items-center gap-1 min-w-0">
-                        <div class="text-[9px] text-slate-400">{{ $v }}</div>
+                        <div class="text-[12px] text-slate-400">{{ $v }}</div>
                         <div class="w-full flex-1 flex items-end">
                             <div class="w-full rounded-t-md"
                                  :style="'height: {{ round($v / $puncak * 100) }}%; min-height: 2px; background: linear-gradient(180deg,#1a4a8a,#0f2e5a);'"></div>
                         </div>
-                        <div class="text-[9px] text-slate-400">{{ $bulanSingkat[$i] }}</div>
+                        <div class="text-[12px] text-slate-400">{{ $bulanSingkat[$i] }}</div>
                     </div>
                 @endforeach
             </div>
@@ -115,7 +115,7 @@
                         </tr>
                     @empty
                         <tr><td colspan="7" class="py-10 text-center text-slate-400 text-sm">
-                            <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 36px;">search_off</span>Tidak ada data yang sesuai.
+                            <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 38px;">search_off</span>Tidak ada data yang sesuai.
                         </td></tr>
                     @endforelse
                 </tbody>

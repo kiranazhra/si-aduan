@@ -9,7 +9,7 @@
                     <div class="text-xs text-slate-400 mt-0.5" x-text="memuat ? 'Memuat…' : (jumlah + ' tiket')"></div>
                 </div>
                 <button type="button" @click="buka = false" class="text-slate-400 hover:text-slate-600 transition" aria-label="Tutup">
-                    <span class="material-icons-outlined" style="font-size: 22px;">close</span>
+                    <span class="material-icons-outlined" style="font-size: 24px;">close</span>
                 </button>
             </div>
             <div class="overflow-auto flex-1" x-html="html"></div>

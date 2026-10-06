@@ -88,7 +88,7 @@
         {{-- Persyaratan --}}
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 mb-4">
             <div class="font-bold text-navy mb-3 flex items-center gap-2">
-                <span class="material-icons-outlined text-emerald-600" style="font-size: 18px;">fact_check</span>
+                <span class="material-icons-outlined text-emerald-600" style="font-size: 20px;">fact_check</span>
                 Persyaratan Pengaduan
             </div>
             <ol class="space-y-2 text-sm text-slate-600 list-decimal list-inside">
@@ -101,7 +101,7 @@
         {{-- Prosedur --}}
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
             <div class="font-bold text-navy mb-3 flex items-center gap-2">
-                <span class="material-icons-outlined text-emerald-600" style="font-size: 18px;">settings_suggest</span>
+                <span class="material-icons-outlined text-emerald-600" style="font-size: 20px;">settings_suggest</span>
                 Sistem, Mekanisme &amp; Prosedur Pengaduan
             </div>
             <ol class="space-y-2 text-sm text-slate-600 list-decimal list-inside">

@@ -63,13 +63,13 @@
 
     <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
         <div class="font-bold text-navy mb-4 flex items-center gap-2">
-            <span class="material-icons-outlined text-emerald-600" style="font-size: 18px;">support_agent</span>
+            <span class="material-icons-outlined text-emerald-600" style="font-size: 20px;">support_agent</span>
             Kanal Pengaduan
         </div>
         <div class="columns-1 sm:columns-2 gap-x-8">
             @foreach ($kanal as $k)
                 <div class="flex items-start gap-2.5 break-inside-avoid mb-4 last:mb-0">
-                    <span class="material-icons-outlined text-slate-400 shrink-0" style="font-size: 18px;">{{ $k['icon'] }}</span>
+                    <span class="material-icons-outlined text-slate-400 shrink-0" style="font-size: 20px;">{{ $k['icon'] }}</span>
                     <div class="text-sm">
                         <div class="font-semibold text-navy">{{ $k['label'] }}</div>
 

@@ -107,9 +107,9 @@
     <div x-show="menu" x-cloak @click="menu = false" class="md:hidden no-print fixed inset-0 z-30 bg-slate-900/30"></div>
 
     {{-- Sidebar --}}
-    <div class="relative no-print shrink-0" :class="collapsed ? 'md:w-[76px]' : 'md:w-56'">
+    <div class="relative no-print shrink-0" :class="collapsed ? 'md:w-[76px]' : 'md:w-64'">
     <aside class="w-56 border-r border-slate-100 flex-col overflow-y-auto md:sticky md:top-0 md:h-screen relative transition-all duration-300"
-           :class="[menu ? 'flex fixed inset-y-0 left-0 z-40 md:static' : 'hidden md:flex', collapsed ? 'md:w-[76px]' : 'md:w-56']">
+           :class="[menu ? 'flex fixed inset-y-0 left-0 z-40 md:static' : 'hidden md:flex', collapsed ? 'md:w-[76px]' : 'md:w-64']">
 
         {{-- Foto latar, menutupi seluruh tinggi sidebar dari atas sampai bawah --}}
         <img src="{{ asset('images/sidebar-bg.jpg') }}" alt=""
@@ -123,7 +123,7 @@
             <img src="{{ asset('images/logo-rsud.png') }}" alt="SI-ADUAN" class="h-10 w-auto object-contain shrink-0 drop-shadow">
             <div x-show="!collapsed" x-cloak>
                 <div class="text-lg font-extrabold text-white leading-tight">SI-ADUAN</div>
-                <div class="text-[10px] text-white/70 leading-snug">Sistem Informasi Aduan Masyarakat RSUD H. Damanhuri Barabai</div>
+                <div class="text-[12px] text-white/70 leading-snug">Sistem Informasi Aduan Masyarakat RSUD H. Damanhuri Barabai</div>
             </div>
         </div>
 
@@ -134,14 +134,14 @@
                 <a href="{{ route($m['rute']) }}" title="{{ $m['label'] }}"
                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all {{ $aktif ? 'grad-btn text-white font-semibold shadow-sm' : 'text-white/85 hover:bg-white/10 font-medium' }}"
                    :class="collapsed ? 'justify-center px-0' : ''">
-                    <span class="material-icons-outlined shrink-0" style="font-size: 18px;">{{ $m['ikon'] }}</span>
+                    <span class="material-icons-outlined shrink-0" style="font-size: 20px;">{{ $m['ikon'] }}</span>
                     <span x-show="!collapsed" x-cloak>{{ $m['label'] }}</span>
                 </a>
             @endforeach
 
             @if ($pengguna->hanyaLihat())
                 <div class="mt-3 px-3 py-2 bg-white/10 rounded-xl text-xs text-white/70 leading-snug" x-show="!collapsed" x-cloak>
-                    <span class="material-icons-outlined block mb-1 text-white/50" style="font-size: 14px;">visibility</span>
+                    <span class="material-icons-outlined block mb-1 text-white/50" style="font-size: 16px;">visibility</span>
                     Anda hanya bisa melihat data tanpa mengubah apa pun.
                 </div>
             @endif
@@ -159,7 +159,7 @@
                 <button type="submit" title="Logout"
                         class="w-full flex items-center gap-2 px-3 py-2 text-sm text-white/90 hover:text-white bg-white/10 hover:bg-white/20 border border-white/15 rounded-lg transition"
                         :class="collapsed ? 'justify-center px-0' : ''">
-                    <span class="material-icons-outlined shrink-0" style="font-size: 16px;">logout</span>
+                    <span class="material-icons-outlined shrink-0" style="font-size: 18px;">logout</span>
                     <span x-show="!collapsed" x-cloak>Logout</span>
                 </button>
             </form>
@@ -171,7 +171,7 @@
     <button type="button" @click="collapsed = !collapsed"
             class="no-print hidden md:flex items-center justify-center w-6 h-6 rounded-full bg-white border border-slate-200 shadow-md text-slate-500 hover:text-navy hover:border-navy transition-all absolute top-5 -right-3 z-20"
             :aria-label="collapsed ? 'Perbesar sidebar' : 'Ciutkan sidebar'">
-        <span class="material-icons-outlined" style="font-size: 14px;" x-text="collapsed ? 'chevron_right' : 'chevron_left'"></span>
+        <span class="material-icons-outlined" style="font-size: 16px;" x-text="collapsed ? 'chevron_right' : 'chevron_left'"></span>
     </button>
     </div>
 
@@ -181,13 +181,13 @@
             <div class="@yield('lebar', 'max-w-5xl') mx-auto mb-4 space-y-3">
                 @if (session('success'))
                     <div class="no-print flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-xl px-4 py-3">
-                        <span class="material-icons-outlined" style="font-size: 18px;">check_circle</span>
+                        <span class="material-icons-outlined" style="font-size: 20px;">check_circle</span>
                         {{ session('success') }}
                     </div>
                 @endif
                 @if (session('error'))
                     <div class="no-print flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3">
-                        <span class="material-icons-outlined" style="font-size: 18px;">error_outline</span>
+                        <span class="material-icons-outlined" style="font-size: 20px;">error_outline</span>
                         {{ session('error') }}
                     </div>
                 @endif

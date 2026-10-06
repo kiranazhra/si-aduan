@@ -20,7 +20,7 @@
         <div>
             <div class="flex items-center gap-2 mb-1">
                 <div class="w-7 h-7 rounded-lg grad-btn flex items-center justify-center">
-                    <span class="material-icons-outlined text-white" style="font-size: 15px;">apartment</span>
+                    <span class="material-icons-outlined text-white" style="font-size: 17px;">apartment</span>
                 </div>
                 <span class="text-xs font-semibold text-slate-500">{{ $pengguna->unit->nama ?? 'Unit belum ditetapkan' }}</span>
             </div>
@@ -68,7 +68,7 @@
 
     {{-- Info hak akses --}}
     <div class="bg-blue-50 border border-blue-100 rounded-2xl px-5 py-3.5 flex items-start gap-3 text-sm text-blue-700">
-        <span class="material-icons-outlined shrink-0 mt-0.5" style="font-size: 16px;">shield</span>
+        <span class="material-icons-outlined shrink-0 mt-0.5" style="font-size: 18px;">shield</span>
         <span>
             Anda masuk sebagai <span class="font-bold">Petugas Unit — {{ $pengguna->unit->nama ?? '-' }}</span>.
             Hanya tiket yang didisposisikan ke unit ini yang ditampilkan.
@@ -103,7 +103,7 @@
                             <td class="py-3 px-4">
                                 <a href="{{ route('unit.tickets.show', ['aduan' => $t->nomor_tiket]) }}"
                                    class="inline-flex items-center gap-1 text-xs text-white grad-btn font-semibold px-3 py-1.5 rounded-lg hover:opacity-90 transition whitespace-nowrap">
-                                    <span class="material-icons-outlined" style="font-size: 13px;">reply</span>
+                                    <span class="material-icons-outlined" style="font-size: 15px;">reply</span>
                                     Tanggapi
                                 </a>
                             </td>
@@ -111,7 +111,7 @@
                     @empty
                         <tr>
                             <td colspan="6" class="py-10 text-center text-slate-400 text-sm">
-                                <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 36px;">inbox</span>
+                                <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 38px;">inbox</span>
                                 Tidak ada tiket aktif untuk unit ini.
                             </td>
                         </tr>

@@ -17,7 +17,7 @@
 
         @if (\App\Support\PeriodeFilter::aktif($f))
             <a href="{{ route('unit.history') }}" class="text-sm text-slate-500 hover:text-slate-700 flex items-center gap-1">
-                <span class="material-icons-outlined" style="font-size: 16px;">close</span> Reset
+                <span class="material-icons-outlined" style="font-size: 18px;">close</span> Reset
             </a>
         @endif
     </form>
@@ -46,7 +46,7 @@
                             <td class="py-3 px-4">
                                 <a href="{{ route('unit.tickets.show', ['aduan' => $t->nomor_tiket]) }}"
                                    class="inline-flex items-center gap-1 text-xs text-slate-500 border border-slate-200 font-semibold px-3 py-1.5 rounded-lg hover:border-slate-300 transition">
-                                    <span class="material-icons-outlined" style="font-size: 13px;">visibility</span>
+                                    <span class="material-icons-outlined" style="font-size: 15px;">visibility</span>
                                     Lihat
                                 </a>
                             </td>
@@ -54,7 +54,7 @@
                     @empty
                         <tr>
                             <td colspan="5" class="py-10 text-center text-slate-400 text-sm">
-                                <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 36px;">history</span>
+                                <span class="material-icons-outlined block mb-2 text-slate-200" style="font-size: 38px;">history</span>
                                 {{ \App\Support\PeriodeFilter::aktif($f) ? 'Tidak ada tiket selesai pada periode ini.' : 'Belum ada tiket yang diselesaikan.' }}
                             </td>
                         </tr>

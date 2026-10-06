@@ -11,7 +11,7 @@
     <form method="GET" action="{{ route('admin.tickets') }}"
           class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-wrap gap-3">
         <div class="flex items-center gap-2 flex-1 min-w-40">
-            <span class="material-icons-outlined text-slate-400" style="font-size: 18px;">search</span>
+            <span class="material-icons-outlined text-slate-400" style="font-size: 20px;">search</span>
             <input type="text" name="q" value="{{ $q }}" placeholder="Cari no. tiket, pelapor, atau judul..."
                    class="flex-1 text-sm focus:outline-none text-slate-700 placeholder:text-slate-400">
         </div>
@@ -28,7 +28,7 @@
 
         @if ($q !== '' || $status !== '')
             <a href="{{ route('admin.tickets') }}" class="text-sm text-slate-500 hover:text-slate-700 flex items-center gap-1 self-center">
-                <span class="material-icons-outlined" style="font-size: 16px;">close</span> Reset
+                <span class="material-icons-outlined" style="font-size: 18px;">close</span> Reset
             </a>
         @endif
     </form>
@@ -56,7 +56,7 @@
                             <td class="py-3 px-4">
                                 <a href="{{ route('admin.tickets.show', ['aduan' => $t->nomor_tiket]) }}"
                                    class="text-xs text-emerald-700 hover:underline font-semibold flex items-center gap-1">
-                                    <span class="material-icons-outlined" style="font-size: 14px;">open_in_new</span>
+                                    <span class="material-icons-outlined" style="font-size: 16px;">open_in_new</span>
                                     Detail
                                 </a>
                             </td>

@@ -30,7 +30,7 @@
 <div class="space-y-5 pb-10">
 
     <a href="{{ route('unit.tickets') }}" class="flex items-center gap-1.5 text-sm text-slate-500 hover:text-navy transition-colors">
-        <span class="material-icons-outlined" style="font-size: 16px;">arrow_back</span>
+        <span class="material-icons-outlined" style="font-size: 18px;">arrow_back</span>
         Kembali ke Tiket Unit Saya
     </a>
 
@@ -41,9 +41,9 @@
                 <div class="text-xs text-slate-400 uppercase tracking-wider mb-1">Nomor Tiket</div>
                 <div class="text-2xl font-mono font-extrabold tracking-wide text-navy">{{ $aduan->nomor_tiket }}</div>
                 <div class="flex flex-wrap items-center gap-3 mt-3 text-xs text-slate-500">
-                    <span class="flex items-center gap-1"><span class="material-icons-outlined" style="font-size: 14px;">category</span>{{ $aduan->kategori->nama ?? '-' }}</span>
-                    <span class="flex items-center gap-1"><span class="material-icons-outlined" style="font-size: 14px;">calendar_today</span>{{ $tglKejadian }}</span>
-                    <span class="flex items-center gap-1"><span class="material-icons-outlined" style="font-size: 14px;">apartment</span>{{ $aduan->lokasi->nama ?? '-' }}</span>
+                    <span class="flex items-center gap-1"><span class="material-icons-outlined" style="font-size: 16px;">category</span>{{ $aduan->kategori->nama ?? '-' }}</span>
+                    <span class="flex items-center gap-1"><span class="material-icons-outlined" style="font-size: 16px;">calendar_today</span>{{ $tglKejadian }}</span>
+                    <span class="flex items-center gap-1"><span class="material-icons-outlined" style="font-size: 16px;">apartment</span>{{ $aduan->lokasi->nama ?? '-' }}</span>
                 </div>
             </div>
             <div class="flex items-center gap-2 px-3.5 py-2 rounded-full text-sm font-bold {{ $cfg['bg'] }} {{ $cfg['teks'] }}">
@@ -55,7 +55,7 @@
     {{-- Banner solusi terkirim --}}
     @if ($aduan->solusi_dikirim_pada)
         <div class="flex items-center gap-3 bg-emerald-50 border border-emerald-200 rounded-2xl px-5 py-3.5 text-sm text-emerald-700">
-            <span class="material-icons-outlined text-emerald-500" style="font-size: 20px;">check_circle</span>
+            <span class="material-icons-outlined text-emerald-500" style="font-size: 22px;">check_circle</span>
             <span>Solusi untuk tiket ini sudah dikirim Admin ke pelapor pada <strong>{{ $terkirimPada }}</strong>. Status tidak dapat diubah lagi.</span>
         </div>
     @endif
@@ -128,7 +128,7 @@
                         @else
                             <a href="{{ $l->url() }}" target="_blank" rel="noopener noreferrer"
                                class="flex items-center gap-2 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-600 hover:border-navy transition">
-                                <span class="material-icons-outlined text-slate-400" style="font-size: 16px;">description</span>
+                                <span class="material-icons-outlined text-slate-400" style="font-size: 18px;">description</span>
                                 {{ $l->nama_file }}
                             </a>
                         @endif
@@ -141,7 +141,7 @@
                      @click="pratinjau = null" @keydown.escape.window="pratinjau = null">
                     <button type="button" @click="pratinjau = null"
                             class="absolute top-5 right-5 text-white/80 hover:text-white">
-                        <span class="material-icons-outlined" style="font-size: 28px;">close</span>
+                        <span class="material-icons-outlined" style="font-size: 30px;">close</span>
                     </button>
                     <img :src="pratinjau" @click.stop class="max-w-full max-h-full rounded-xl shadow-2xl">
                 </div>
@@ -164,7 +164,7 @@
                         <div class="absolute left-[-1.25rem] top-5 bottom-0 w-px bg-slate-100"></div>
                     @endif
                     <div class="absolute left-[-1.75rem] top-0.5 w-6 h-6 rounded-full flex items-center justify-center {{ $khusus ? 'bg-emerald-50 border border-emerald-200' : 'bg-white border border-slate-200' }}">
-                        <span class="material-icons-outlined {{ $khusus ? 'text-emerald-500' : 'text-slate-400' }}" style="font-size: 13px;">{{ $ikon }}</span>
+                        <span class="material-icons-outlined {{ $khusus ? 'text-emerald-500' : 'text-slate-400' }}" style="font-size: 15px;">{{ $ikon }}</span>
                     </div>
                     <div class="text-sm font-medium text-slate-700">{{ $r->judul }}</div>
                     @if ($r->catatan)
@@ -192,11 +192,11 @@
                 <div class="flex items-start flex-1">
                     <div class="flex flex-col items-center">
                         <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 border-2 transition-all {{ $selesaiLangkah ? 'bg-emerald-500 border-emerald-500 text-white' : ($aktifLangkah ? 'bg-white border-[#1565C0] text-[#1565C0]' : 'bg-white border-slate-200 text-slate-300') }}">
-                            <span class="material-icons-outlined" style="font-size: 17px;">{{ $selesaiLangkah ? 'check' : $step['ikon'] }}</span>
+                            <span class="material-icons-outlined" style="font-size: 19px;">{{ $selesaiLangkah ? 'check' : $step['ikon'] }}</span>
                         </div>
                         <div class="mt-2 text-center px-1 {{ $aktifLangkah ? 'text-navy' : ($selesaiLangkah ? 'text-slate-500' : 'text-slate-300') }}">
                             <div class="text-xs leading-tight {{ $aktifLangkah ? 'font-bold' : 'font-medium' }}">{{ $step['label'] }}</div>
-                            <div class="text-[10px] leading-tight mt-0.5 max-w-[84px] mx-auto truncate" title="{{ $step['sub'] }}">{{ $step['sub'] }}</div>
+                            <div class="text-[12px] leading-tight mt-0.5 max-w-[84px] mx-auto truncate" title="{{ $step['sub'] }}">{{ $step['sub'] }}</div>
                         </div>
                     </div>
                     @if (! $akhir)
@@ -213,7 +213,7 @@
               class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 space-y-4">
             @csrf
             <div class="flex items-center gap-2">
-                <span class="material-icons-outlined text-emerald-600" style="font-size: 20px;">reply</span>
+                <span class="material-icons-outlined text-emerald-600" style="font-size: 22px;">reply</span>
                 <div class="text-sm font-bold text-navy">Tanggapi &amp; Perbarui Status</div>
             </div>
             <div>
@@ -231,7 +231,7 @@
             </div>
             <button type="submit" class="w-full grad-btn text-white font-semibold py-3 rounded-xl transition">Simpan Tanggapan</button>
             <p class="text-xs text-slate-400 flex items-start gap-1.5">
-                <span class="material-icons-outlined shrink-0" style="font-size: 14px;">info</span>
+                <span class="material-icons-outlined shrink-0" style="font-size: 16px;">info</span>
                 Solusi akhir ke pelapor dikirim oleh Admin melalui WhatsApp setelah status tiket ini Selesai.
             </p>
         </form>

@@ -31,7 +31,7 @@
             <span class="text-2xl md:text-3xl font-semibold text-slate-100 [text-shadow:0_2px_10px_rgba(0,0,0,0.55)]">Sistem Informasi Pengaduan Masyarakat</span>
         </h1>
 
-        <p class="text-slate-100 text-lg max-w-xl mx-auto [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]">
+        <p class="text-emerald-200 text-lg max-w-xl mx-auto [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]">
             Sampaikan pengaduan layanan kesehatan Anda
             <br> kami pastikan setiap aduan ditangani tepat sasaran.
         </p>
@@ -80,7 +80,7 @@
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-3 sm:p-5 text-center">
                 <span class="material-icons-outlined text-emerald-600 mb-1 sm:mb-2 block text-xl sm:text-2xl">{{ $s['icon'] }}</span>
                 <div class="text-lg sm:text-2xl font-extrabold text-navy">{{ $s['value'] }}</div>
-                <div class="text-[10px] sm:text-xs text-slate-500 mt-0.5">{{ $s['label'] }}</div>
+                <div class="text-[12px] sm:text-xs text-slate-500 mt-0.5">{{ $s['label'] }}</div>
             </div>
         @endforeach
     </div>

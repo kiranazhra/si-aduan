@@ -104,7 +104,7 @@
                         <input type="text" name="no_wa_pelapor" x-model="phone" placeholder="08xxxxxxxxxx" required maxlength="20" inputmode="tel"
                                class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-navy transition">
                         <p class="mt-1.5 text-xs text-slate-400 flex items-start gap-1">
-                            <span class="material-icons-outlined shrink-0" style="font-size: 14px;">info</span>
+                            <span class="material-icons-outlined shrink-0" style="font-size: 16px;">info</span>
                             Isi dengan nomor WhatsApp yang aktif. Tindak lanjut dan jawaban pengaduan akan dikirim ke nomor ini.
                         </p>
                     </div>

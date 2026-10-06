@@ -40,7 +40,7 @@
     </div>
 
     <div class="bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4 text-sm text-blue-700 flex items-start gap-2">
-        <span class="material-icons-outlined shrink-0 mt-0.5" style="font-size: 16px;">shield</span>
+        <span class="material-icons-outlined shrink-0 mt-0.5" style="font-size: 18px;">shield</span>
         <span>
             Akun ini hanya dapat mengakses tiket yang didisposisikan ke
             <strong>{{ $pengguna->unit->nama ?? 'unit Anda' }}</strong>.
