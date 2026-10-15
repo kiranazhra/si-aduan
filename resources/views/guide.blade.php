@@ -32,9 +32,9 @@
 
     $faqs = [
         ['q' => 'Berapa lama pengaduan akan ditangani?', 'a' => 'Sesuai standar pelayanan: pengaduan kategori Merah (berat/mendesak) 1×24 jam, Kuning (sedang) 3 hari kerja, dan Hijau (ringan) 7 hari kerja sejak diterima.'],
-        ['q' => 'Apakah ada biaya untuk mengajukan pengaduan?', 'a' => 'Tidak ada biaya sama sekali — layanan pengaduan RSUD H. Damanhuri Barabai sepenuhnya gratis.'],
+        ['q' => 'Apakah ada biaya untuk mengajukan pengaduan?', 'a' => 'Tidak ada biaya sama sekali. Layanan pengaduan RSUD H. Damanhuri Barabai sepenuhnya gratis.'],
         ['q' => 'Apakah saya bisa melacak pengaduan tanpa akun?', 'a' => 'Bisa, cukup gunakan nomor tiket yang diberikan setelah pengaduan berhasil dikirim.'],
-        ['q' => 'Pengaduan apa saja yang bisa disampaikan?', 'a' => 'Segala hal terkait pelayanan rumah sakit: fasilitas, tenaga medis, administrasi, dan kebersihan — dalam bentuk saran, masukan, solusi, maupun rekomendasi.'],
+        ['q' => 'Pengaduan apa saja yang bisa disampaikan?', 'a' => 'Segala hal terkait pelayanan rumah sakit: fasilitas, tenaga medis, administrasi, dan kebersihan. Dalam bentuk saran, masukan, solusi, maupun rekomendasi.'],
     ];
 @endphp
 

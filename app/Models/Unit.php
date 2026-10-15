@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\KelompokUnit;
+use App\Support\AkunUnit;
 use App\Support\KodeSingkat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +24,12 @@ class Unit extends Model
             'kelompok' => KelompokUnit::class,
             'aktif'    => 'boolean',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        // Unit baru otomatis dibuatkan akun Petugas Unit.
+        static::created(fn (Unit $unit) => AkunUnit::buatUntuk($unit));
     }
 
     public function petugas(): HasMany

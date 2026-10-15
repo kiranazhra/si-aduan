@@ -14,7 +14,7 @@
 
 <div class="space-y-6">
     <div class="no-print">
-    <x-admin.judul judul="Kesimpulan" :sub="'Total aduan per status berdasarkan data tahun ' . $tahun">
+    <x-admin.judul sejajar judul="Kesimpulan" :sub="'Total aduan per status berdasarkan data tahun ' . $tahun">
         <x-admin.filter-periode
                 :tahun="$tahun" :bulan="$bulan" :tanggal="$tanggal" :unitId="$unitId"
                 :daftarTahun="$daftarTahun" :daftarUnit="$daftarUnit" />
@@ -25,16 +25,14 @@
     <div class="no-print grid grid-cols-2 lg:grid-cols-4 gap-4">
         @foreach ($kartu as $k)
             <button type="button" @click="{{ \App\Support\RekapUi::detail($k['label'], $k['by'], $k['v'], $tahun, $bulan, $tanggal, $unitId) }}"
-                    class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex items-center gap-4 text-left hover:border-navy hover:shadow-md transition-all group">
-                <div class="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 {{ $k['warna'] }}">
-                    <span class="material-icons-outlined text-3xl">{{ $k['ikon'] }}</span>
+                    class="relative bg-white rounded-2xl border border-slate-100 shadow-sm p-5 text-left hover:border-navy hover:shadow-md transition-all group">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3 {{ $k['warna'] }}">
+                    <span class="material-icons-outlined" style="font-size: 20px;">{{ $k['ikon'] }}</span>
                 </div>
-                <div>
-                    <div class="text-base text-slate-500">{{ $k['label'] }}</div>
-                    <div class="text-4xl font-extrabold text-navy">{{ $k['nilai'] }}</div>
-                    <div class="text-sm text-slate-400">tahun {{ $tahun }}</div>
-                </div>
-                <span class="material-icons-outlined text-slate-200 group-hover:text-emerald-500 transition ml-auto" style="font-size: 22px;">open_in_new</span>
+                <span class="material-icons-outlined absolute top-4 right-4 text-slate-300 group-hover:text-emerald-500 transition" style="font-size: 18px;">open_in_new</span>
+                <div class="text-3xl font-extrabold text-navy">{{ $k['nilai'] }}</div>
+                <div class="text-xs text-slate-500 mt-0.5">{{ $k['label'] }}</div>
+                <div class="text-xs text-slate-400">tahun {{ $tahun }}</div>
             </button>
         @endforeach
     </div>

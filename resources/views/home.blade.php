@@ -60,9 +60,6 @@
                         <div class="w-10 h-10 rounded-xl grad-btn flex items-center justify-center shrink-0">
                             <span class="material-icons-outlined text-white text-lg">{{ $step['icon'] }}</span>
                         </div>
-                        @if ($i < count($steps) - 1)
-                            <div class="hidden md:block absolute top-5 left-10 w-[calc(100%-2.5rem)] h-px bg-slate-100 -z-0"></div>
-                        @endif
                     </div>
                     <div class="pb-6 md:pb-0">
                         <div class="text-xs text-slate-400 mb-0.5">Langkah {{ $i + 1 }}</div>

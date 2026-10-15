@@ -9,13 +9,13 @@
         ['label' => 'Total Kategori', 'nilai' => $jumlahKategori, 'ikon' => 'category',   'warna' => 'bg-blue-50 text-blue-600'],
         ['label' => 'Total Aduan',    'nilai' => $totalAduan,     'ikon' => 'inbox',      'warna' => 'bg-slate-50 text-slate-600'],
         ['label' => 'Tertinggi',      'nilai' => $tertinggi,      'ikon' => 'trending_up', 'warna' => 'bg-red-50 text-red-600'],
-        ['label' => 'Rata-rata/Kat',  'nilai' => $jumlahKategori ? (int) round($totalAduan / $jumlahKategori) : 0, 'ikon' => 'bar_chart', 'warna' => 'bg-emerald-50 text-emerald-600'],
+        ['label' => 'Rata-rata per Kategori','nilai' => $jumlahKategori ? (int) round($totalAduan / $jumlahKategori) : 0, 'ikon' => 'bar_chart', 'warna' => 'bg-emerald-50 text-emerald-600'],
     ];
 @endphp
 
 <div class="space-y-6">
     <div class="no-print">
-    <x-admin.judul judul="Rekap Kategori Aduan" sub="Distribusi pengaduan berdasarkan kategori pelayanan">
+    <x-admin.judul sejajar judul="Rekap Kategori Aduan" sub="Distribusi pengaduan berdasarkan kategori pelayanan">
         <x-admin.filter-periode-kategori
                 :tahun="$tahun" :bulan="$bulan" :tanggal="$tanggal" :kategoriId="$kategoriId"
                 :daftarTahun="$daftarTahun" :daftarKategori="$daftarKategori" />

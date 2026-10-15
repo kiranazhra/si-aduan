@@ -93,12 +93,22 @@
                             </td>
                             <td class="py-3 px-3 text-slate-600">{{ $u->penanggung_jawab ?: '—' }}</td>
                             <td class="py-3 px-3 text-slate-600 font-mono text-xs">{{ $u->no_wa ? '+' . $u->no_wa : '—' }}</td>
-                            <td class="py-3 px-3">
+                            <td class="py-3 px-3 whitespace-nowrap">
                                 @if ($bolehUbah)
-                                    <button type="button" class="text-slate-400 hover:text-navy transition" title="Ubah"
+                                    <button type="button" class="text-slate-400 hover:text-navy transition align-middle" title="Ubah"
                                             @click="ubahUnit(@js(['id' => $u->id, 'kode' => $u->kode, 'nama' => $u->nama, 'kelompok' => $u->kelompok->value, 'penanggung_jawab' => $u->penanggung_jawab ?? '', 'no_wa' => $u->no_wa ?? '', 'aktif' => (bool) $u->aktif]))">
                                         <span class="material-icons-outlined" style="font-size: 17px;">edit</span>
                                     </button>
+                                    <form method="POST" action="{{ route('admin.config.unit.destroy', $u) }}" class="inline"
+                                          onsubmit="return confirm('Hapus unit {{ e(addslashes($u->nama)) }} beserta akun petugasnya? Tindakan ini tidak dapat dibatalkan.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="cari_unit" value="{{ $cari }}">
+                                        <input type="hidden" name="unit_page" value="{{ $unit->currentPage() }}">
+                                        <button type="submit" class="ml-2 text-slate-400 hover:text-red-500 transition align-middle" title="Hapus">
+                                            <span class="material-icons-outlined" style="font-size: 17px;">delete</span>
+                                        </button>
+                                    </form>
                                 @endif
                             </td>
                         </tr>
@@ -126,7 +136,7 @@
 
         <div class="flex flex-wrap gap-2 mb-4 mt-2">
             @foreach ($peran as $p)
-                <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ $lencanaPeran[$p->value] }}">{{ $p->label() }}</span>
+                <span class="whitespace-nowrap text-xs font-semibold px-2.5 py-1 rounded-full {{ $lencanaPeran[$p->value] }}">{{ $p->label() }}</span>
             @endforeach
         </div>
 
@@ -150,8 +160,8 @@
                                 </div>
                                 <div class="text-[13px] text-slate-400">{{ $s->email }}</div>
                             </td>
-                            <td class="py-3 px-3">
-                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ $lencanaPeran[$s->peran->value] }}">{{ $s->peran->label() }}</span>
+                            <td class="py-3 px-3 whitespace-nowrap">
+                                <span class="inline-block whitespace-nowrap text-xs font-semibold px-2.5 py-1 rounded-full {{ $lencanaPeran[$s->peran->value] }}">{{ $s->peran->label() }}</span>
                             </td>
                             <td class="py-3 px-3">
                                 @if ($s->unit)
@@ -161,12 +171,22 @@
                                 @endif
                             </td>
                             <td class="py-3 px-3 text-slate-500 text-xs">{{ $s->peran->deskripsi() }}</td>
-                            <td class="py-3 px-3">
+                            <td class="py-3 px-3 whitespace-nowrap">
                                 @if ($bolehUbah)
-                                    <button type="button" class="text-slate-400 hover:text-navy transition" title="Ubah"
+                                    <button type="button" class="text-slate-400 hover:text-navy transition align-middle" title="Ubah"
                                             @click="ubahStaf(@js(['id' => $s->id, 'name' => $s->name, 'email' => $s->email, 'password' => '', 'peran' => $s->peran->value, 'unit_id' => $s->unit_id ?? '', 'no_wa' => $s->no_wa ?? '', 'aktif' => (bool) $s->aktif]))">
                                         <span class="material-icons-outlined" style="font-size: 17px;">edit</span>
                                     </button>
+                                    @if ($s->id !== auth()->id())
+                                        <form method="POST" action="{{ route('admin.config.staff.destroy', $s) }}" class="inline"
+                                              onsubmit="return confirm('Hapus akun {{ e(addslashes($s->name)) }}? Tindakan ini tidak dapat dibatalkan.')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="ml-2 text-slate-400 hover:text-red-500 transition" title="Hapus">
+                                                <span class="material-icons-outlined" style="font-size: 17px;">delete</span>
+                                            </button>
+                                        </form>
+                                    @endif
                                 @endif
                             </td>
                         </tr>

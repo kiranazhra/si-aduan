@@ -18,5 +18,8 @@ class DatabaseSeeder extends Seeder
         if (app()->environment('local')) {
             $this->call(AkunDemoSeeder::class);
         }
+
+        // Pastikan setiap unit punya akun petugas (yang sudah punya dilewati).
+        \App\Support\AkunUnit::buatSemua();
     }
 }

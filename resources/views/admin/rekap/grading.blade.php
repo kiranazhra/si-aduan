@@ -14,7 +14,7 @@
 
 <div class="space-y-6">
     <div class="no-print">
-    <x-admin.judul judul="Rekap Grading Unit" sub="Jumlah aduan per grading (Merah/Kuning/Hijau) di tiap unit pelayanan">
+    <x-admin.judul sejajar judul="Rekap Grading Unit" sub="Jumlah aduan per grading (Merah/Kuning/Hijau) di tiap unit pelayanan">
         <x-admin.filter-periode
                 :tahun="$tahun" :bulan="$bulan" :tanggal="$tanggal" :unitId="$unitId"
                 :daftarTahun="$daftarTahun" :daftarUnit="$daftarUnit" />

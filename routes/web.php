@@ -65,8 +65,10 @@ Route::middleware(['auth', AdminOnly::class])->prefix('admin')->name('admin.')->
     Route::get('/konfigurasi', [KonfigurasiController::class, 'index'])->name('config');
     Route::post('/konfigurasi/unit', [KonfigurasiController::class, 'simpanUnit'])->name('config.unit.store');
     Route::put('/konfigurasi/unit/{unit}', [KonfigurasiController::class, 'ubahUnit'])->name('config.unit.update');
+    Route::delete('/konfigurasi/unit/{unit}', [KonfigurasiController::class, 'hapusUnit'])->name('config.unit.destroy');
     Route::post('/konfigurasi/staf', [KonfigurasiController::class, 'simpanStaf'])->name('config.staff.store');
     Route::put('/konfigurasi/staf/{user}', [KonfigurasiController::class, 'ubahStaf'])->name('config.staff.update');
+    Route::delete('/konfigurasi/staf/{user}', [KonfigurasiController::class, 'hapusStaf'])->name('config.staff.destroy');
 
     // Profil
     Route::get('/profil', [ProfilController::class, 'index'])->name('profile');

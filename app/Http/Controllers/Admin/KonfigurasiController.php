@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Support\PesanValidasi;
 use App\Support\Wa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class KonfigurasiController extends Controller
@@ -72,7 +73,7 @@ class KonfigurasiController extends Controller
             'aktif'            => $request->boolean('aktif', true),
         ]);
 
-        return redirect()->route('admin.config')->with('success', 'Unit baru ditambahkan.');
+        return redirect()->route('admin.config')->with('success', 'Unit baru ditambahkan beserta akun petugasnya (kata sandi awal: ' . \App\Support\AkunUnit::SANDI_AWAL . ').');
     }
 
     public function ubahUnit(Request $request, Unit $unit)
@@ -98,6 +99,29 @@ class KonfigurasiController extends Controller
 
         return redirect()->route('admin.config', $request->only('cari_unit', 'unit_page'))
             ->with('success', 'Data unit diperbarui.');
+    }
+
+    public function hapusUnit(Request $request, Unit $unit)
+    {
+        $this->hanyaSuperAdmin($request);
+
+        // Unit yang sudah dipakai tiket tidak boleh dihapus (menjaga data riwayat & rekap).
+        if ($unit->aduan()->exists() || $unit->aduanLokasi()->exists()) {
+            return redirect()->route('admin.config', $request->only('cari_unit', 'unit_page'))
+                ->with('error', "Unit {$unit->nama} sudah dipakai pada tiket sehingga tidak dapat dihapus. Nonaktifkan saja lewat tombol ubah.");
+        }
+
+        // Akun Petugas Unit milik unit ini ikut dihapus agar tidak ada akun tanpa unit.
+        $nama = $unit->nama;
+        DB::transaction(function () use ($unit) {
+            User::where('unit_id', $unit->id)
+                ->where('peran', PeranPengguna::PetugasUnit->value)
+                ->delete();
+            $unit->delete();
+        });
+
+        return redirect()->route('admin.config', $request->only('cari_unit', 'unit_page'))
+            ->with('success', "Unit {$nama} beserta akun petugasnya dihapus.");
     }
 
     // ── Staf ────────────────────────────────────────────────
@@ -159,6 +183,20 @@ class KonfigurasiController extends Controller
         $user->update($isi);
 
         return redirect()->route('admin.config')->with('success', 'Data staf diperbarui.');
+    }
+
+    public function hapusStaf(Request $request, User $user)
+    {
+        $this->hanyaSuperAdmin($request);
+
+        if ($user->id === $request->user()->id) {
+            return redirect()->route('admin.config')->with('error', 'Akun Anda sendiri tidak dapat dihapus.');
+        }
+
+        $nama = $user->name;
+        $user->delete(); // riwayat tiket tetap aman (relasi ke pengguna diset kosong)
+
+        return redirect()->route('admin.config')->with('success', "Akun {$nama} dihapus.");
     }
 
     // ── Bantuan ─────────────────────────────────────────────

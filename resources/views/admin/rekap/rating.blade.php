@@ -9,7 +9,7 @@
 
 <div class="space-y-6">
     <div class="no-print">
-    <x-admin.judul judul="Rekap Rating Pelayanan" sub="Penilaian bintang dari pelapor terhadap pelayanan rumah sakit">
+    <x-admin.judul sejajar judul="Rekap Rating Pelayanan" sub="Penilaian bintang dari pelapor terhadap pelayanan rumah sakit">
         <x-admin.filter-periode
                 :tahun="$tahun" :bulan="$bulan" :tanggal="$tanggal" :unitId="$unitId"
                 :daftarTahun="$daftarTahun" :daftarUnit="$daftarUnit" />
