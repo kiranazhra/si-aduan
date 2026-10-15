@@ -70,7 +70,7 @@
     <div>
         <div style="color:#2dd4bf" class="text-xs font-bold uppercase tracking-widest mb-2 [text-shadow:0_1px_6px_rgba(0,0,0,0.5)]">Standar Pelayanan</div>
         <h2 class="text-xl font-bold text-navy mb-1">Standar Pelayanan Unit Pengaduan</h2>
-        <p class="text-sm text-white mb-5 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)]">Produk layanan: Jasa Konsultasi (saran, masukan, solusi, dan rekomendasi) — <span style="color:#2dd4bf" class="font-semibold">tidak dipungut biaya / gratis</span>.</p>
+        <p class="text-sm text-white mb-5 [text-shadow:0_1px_8px_rgba(0,0,0,0.55)]">Produk layanan: Jasa Konsultasi (saran, masukan, solusi, dan rekomendasi), <span style="color:#2dd4bf" class="font-semibold">tidak dipungut biaya / gratis</span>.</p>
 
         {{-- Jangka waktu --}}
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
