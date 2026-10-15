@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Aduan;
 use App\Models\Kategori;
 use App\Models\Unit;
-use App\Support\CsvExport;
+use App\Support\XlsxExport;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -21,7 +21,7 @@ use Illuminate\Http\Request;
  *   ?tanggal=2026-11-15  (opsional - harian, PALING prioritas, menimpa bulan+tahun)
  *   ?unit_id=5           (opsional - kunci ke satu unit/poli; kosong = semua unit)
  *   ?q=kata              (pencarian)
- *   ?export=csv          (unduh Excel/CSV)
+ *   ?export=csv          (unduh Excel .xlsx; nilai "csv" dipertahankan agar tautan lama tetap jalan)
  */
 class RekapController extends Controller
 {
@@ -71,7 +71,7 @@ class RekapController extends Controller
             ->latest('dibuat_pada')->latest('id');
 
         if ($this->ekspor($request)) {
-            return $this->csvTiket("rekap-data-aduan-{$u['tahun']}.csv", $tabel);
+            return $this->csvTiket("rekap-data-aduan-{$u['tahun']}.xlsx", $tabel);
         }
 
         return view('admin.rekap.data', $u + [
@@ -100,7 +100,7 @@ class RekapController extends Controller
         $baris = $this->hitungPerGrup(Kategori::query(), $u, $q, $totalAduan, 'aduan', $kategoriId);
 
         if ($this->ekspor($request)) {
-            return CsvExport::unduh("rekap-kategori-{$u['tahun']}.csv",
+            return XlsxExport::unduh("rekap-kategori-{$u['tahun']}.xlsx",
                 ['Kategori', 'Total', 'Diproses', 'Dikoordinasikan', 'Selesai', '% Total'],
                 $baris->map(fn ($r) => [$r->nama, $r->total, $r->diproses, $r->dikoordinasikan, $r->selesai, $r->pct . '%']));
         }
@@ -127,7 +127,7 @@ class RekapController extends Controller
         $baris = $this->hitungPerGrup(Unit::query(), $u, $q, $totalAduan, 'aduanLokasi');
 
         if ($this->ekspor($request)) {
-            return CsvExport::unduh("rekap-lokasi-{$u['tahun']}.csv",
+            return XlsxExport::unduh("rekap-lokasi-{$u['tahun']}.xlsx",
                 ['Lokasi', 'Total', 'Diproses', 'Dikoordinasikan', 'Selesai', '% Total'],
                 $baris->map(fn ($r) => [$r->nama, $r->total, $r->diproses, $r->dikoordinasikan, $r->selesai, $r->pct . '%']));
         }
@@ -176,7 +176,7 @@ class RekapController extends Controller
             : $semua->filter(fn ($r) => str_contains(mb_strtolower($r->nama), mb_strtolower($q)))->values();
 
         if ($this->ekspor($request)) {
-            return CsvExport::unduh("rekap-media-{$u['tahun']}.csv",
+            return XlsxExport::unduh("rekap-media-{$u['tahun']}.xlsx",
                 ['Saluran', 'Total', 'Selesai', '% Total'],
                 $baris->map(fn ($r) => [$r->nama, $r->total, $r->selesai, $r->pct . '%']));
         }
@@ -226,7 +226,7 @@ class RekapController extends Controller
             : $semua->filter(fn ($r) => str_contains(mb_strtolower($r->nama), mb_strtolower($q)))->values();
 
         if ($this->ekspor($request)) {
-            return CsvExport::unduh("rekap-rating-unit-{$u['tahun']}.csv",
+            return XlsxExport::unduh("rekap-rating-unit-{$u['tahun']}.xlsx",
                 ['Unit', 'Jumlah Ulasan', 'Rata-rata (dari 5)', 'Sangat Puas (5)', 'Puas (4)', 'Cukup Puas (3)', 'Kurang Puas (2)', 'Tidak Puas (1)'],
                 $baris->map(fn ($r) => [$r->nama, $r->total, $r->rata, $r->per[5], $r->per[4], $r->per[3], $r->per[2], $r->per[1]]));
         }
@@ -254,7 +254,7 @@ class RekapController extends Controller
             : $semua->filter(fn ($r) => str_contains(mb_strtolower($r->nama), mb_strtolower($q)))->values();
 
         if ($this->ekspor($request)) {
-            return CsvExport::unduh("rekap-grading-unit-{$u['tahun']}.csv",
+            return XlsxExport::unduh("rekap-grading-unit-{$u['tahun']}.xlsx",
                 ['Unit', 'Total Aduan', 'Merah (1x24 Jam)', 'Kuning (3 Hari Kerja)', 'Hijau (7 Hari Kerja)', 'Belum Digrading'],
                 $baris->map(fn ($r) => [$r->nama, $r->total, $r->merah, $r->kuning, $r->hijau, $r->kosong]));
         }
@@ -286,7 +286,7 @@ class RekapController extends Controller
             ->latest('dibuat_pada')->latest('id');
 
         if ($this->ekspor($request)) {
-            return $this->csvTiket("rekap-kesimpulan-{$u['tahun']}.csv", $tabel, true);
+            return $this->csvTiket("rekap-kesimpulan-{$u['tahun']}.xlsx", $tabel, true);
         }
 
         return view('admin.rekap.kesimpulan', $u + [
@@ -607,6 +607,6 @@ class RekapController extends Controller
             return $r;
         });
 
-        return CsvExport::unduh($namaFile, $header, $baris);
+        return XlsxExport::unduh($namaFile, $header, $baris);
     }
 }

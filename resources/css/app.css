@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&display=swap');
 @import 'tailwindcss';
 
 @theme {
     --color-navy: #0f2e5a;
+    --font-script: 'Dancing Script', 'Brush Script MT', cursive;
 
     /* Skala font diperbesar (default Tailwind -> lebih besar) */
     --text-xs: 0.875rem;

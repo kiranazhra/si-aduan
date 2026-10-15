@@ -19,8 +19,9 @@
 @endphp
 
 <div class="space-y-6">
-    <x-admin.judul judul="Dashboard"
-        :sub="'Ringkasan pengaduan masuk — ' . now()->locale('id')->translatedFormat('l, j F Y')" />
+    <x-admin.judul judul="Dashboard" sub="Ringkasan pengaduan masuk">
+        <x-admin.salam />
+    </x-admin.judul>
 
     {{-- Kartu ringkasan --}}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">

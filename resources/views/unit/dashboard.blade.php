@@ -26,10 +26,7 @@
             </div>
             <h1 class="text-2xl font-extrabold text-navy">Dashboard Unit</h1>
         </div>
-        <div class="text-right mt-1">
-            <div class="text-xs text-slate-400">{{ now()->locale('id')->translatedFormat('l, j F Y') }}</div>
-            <p class="text-sm text-slate-500 mt-0.5">Selamat datang, <span class="font-semibold">{{ $pengguna->name }}</span></p>
-        </div>
+        <x-admin.salam />
     </div>
 
     {{-- Kartu ringkasan --}}
