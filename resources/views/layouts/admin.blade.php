@@ -108,7 +108,7 @@
 
     {{-- Sidebar --}}
     <div class="relative no-print shrink-0" :class="collapsed ? 'md:w-[76px]' : 'md:w-64'">
-    <aside class="w-56 border-r border-slate-100 flex-col overflow-y-auto md:sticky md:top-0 md:h-screen relative transition-all duration-300"
+    <aside class="w-56 border-r border-slate-100 flex-col overflow-y-auto md:sticky md:top-0 md:h-screen transition-all duration-300"
            :class="[menu ? 'flex fixed inset-y-0 left-0 z-40 md:static' : 'hidden md:flex', collapsed ? 'md:w-[76px]' : 'md:w-64']">
 
         {{-- Foto latar, menutupi seluruh tinggi sidebar dari atas sampai bawah --}}
