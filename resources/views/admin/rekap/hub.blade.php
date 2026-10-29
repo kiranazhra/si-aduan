@@ -11,14 +11,13 @@
         ['ikon' => 'star',      'label' => 'Rating Pelayanan', 'ket' => 'Penilaian bintang dari pelapor, per unit',  'rute' => 'admin.recap.rating'],
         ['ikon' => 'place',     'label' => 'Lokasi / Ruangan', 'ket' => 'Distribusi pengaduan per area rumah sakit', 'rute' => 'admin.recap.room'],
         ['ikon' => 'insights',  'label' => 'Kesimpulan',       'ket' => 'Total per status dan daftar tiket lengkap', 'rute' => 'admin.recap.conclusion'],
-        ['ikon' => 'folder_open', 'label' => 'Berkas Rekap',   'ket' => 'Unduh laporan Excel dan PDF',               'rute' => 'admin.recap.files'],
     ];
 @endphp
 
 <div class="space-y-6">
     <x-admin.judul judul="Rekap & Laporan" sub="Pilih laporan yang ingin ditampilkan" />
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         @foreach ($bagian as $b)
             <a href="{{ route($b['rute'], ['tahun' => $tahun]) }}"
                class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 text-left hover:border-navy hover:shadow-md transition-all group">

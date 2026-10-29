@@ -44,6 +44,16 @@
             @page { size: A4 landscape; margin: 10mm; }
 
             body { background: #fff !important; }
+
+            /* Saat cetak, buang layout flex/tinggi layar. Chrome tidak bisa memecah
+               konten flex antar halaman dengan baik (tabel jadi terpotong & ada ruang kosong). */
+            html, body { height: auto !important; min-height: 0 !important; }
+            body > .min-h-screen { display: block !important; min-height: 0 !important; }
+            main { display: block !important; padding: 0 !important; min-width: 0 !important; }
+            main > div { max-width: 100% !important; }
+            .space-y-6 > * { margin-top: 0 !important; margin-bottom: 0 !important; }
+            .kop-cetak { break-inside: avoid; page-break-inside: avoid; }
+            .rekap-tabel { margin-top: 6px !important; }
             .no-print { display: none !important; }
             .kop-cetak { display: block !important; }
             .ttd-cetak {
@@ -83,7 +93,9 @@
                 background: #f1f5f9 !important;
                 font-weight: 700 !important;
             }
-            .rekap-tabel tr { page-break-inside: avoid; }
+            .rekap-tabel thead { display: table-header-group !important; }
+            .rekap-tabel tr { break-inside: avoid; page-break-inside: avoid; }
+            .ttd-cetak { break-inside: avoid; page-break-inside: avoid; }
         }
     </style>
 </head>

@@ -12,11 +12,12 @@
 
     <div class="site-bg flex-1 flex flex-col"
          x-data="{ slide: 0 }"
-         x-init="setInterval(() => slide = (slide + 1) % 3, 5000)">
+         x-init="setInterval(() => slide = (slide + 1) % 4, 5000)">
 
         <img src="{{ asset('images/pelapor-bg-1.jpg') }}" alt="" class="site-bg-slide" :style="{ opacity: slide === 0 ? 1 : 0 }">
         <img src="{{ asset('images/pelapor-bg-2.jpg') }}" alt="" class="site-bg-slide" :style="{ opacity: slide === 1 ? 1 : 0 }">
         <img src="{{ asset('images/pelapor-bg-3.jpg') }}" alt="" class="site-bg-slide" :style="{ opacity: slide === 2 ? 1 : 0 }">
+        <img src="{{ asset('images/pelapor-bg-4.jpg') }}" alt="" class="site-bg-slide" :style="{ opacity: slide === 3 ? 1 : 0 }">
         <div class="site-bg-overlay"></div>
 
         <div class="relative flex-1 flex flex-col" style="z-index: 10;">
